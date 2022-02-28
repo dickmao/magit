@@ -25,8 +25,13 @@ RMDIR    ?= rm -rf
 TAR      ?= tar
 SED      ?= sed
 
-EMACSBIN ?= emacs
-BATCH     = $(EMACSBIN) -Q --batch $(LOAD_PATH)
+CASK     ?= $(shell which cask)
+EMACS    ?= emacs
+EMACSBIN := $(EMACS)
+ifneq ($(CASK),)
+LOAD_PATH = -L $(TOP)
+endif
+BATCH     = EMACSLOADPATH=$(EMACSLOADPATH) $(EMACS) -Q --batch $(LOAD_PATH)
 
 INSTALL_INFO     ?= $(shell command -v ginstall-info || printf install-info)
 MAKEINFO         ?= makeinfo

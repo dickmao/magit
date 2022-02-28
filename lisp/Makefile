@@ -1,10 +1,12 @@
 -include ../config.mk
 include ../default.mk
+include ../cask.mk
 
 ## ###################################################################
 
 .PHONY: magit-version.el check-declare install
 
+.DEFAULT_GOAL := all
 all: lisp
 
 ## Build order #######################################################
@@ -68,7 +70,7 @@ magit-obsolete.elc:        magit.elc
 
 ## Build #############################################################
 
-lisp:       $(ELCS) loaddefs $(LISP_EXTRA_TARGETS)
+lisp:       cask $(ELCS) loaddefs $(LISP_EXTRA_TARGETS)
 loaddefs:   $(PKG)-autoloads.el
 versionlib: $(PKG)-version.el
 
