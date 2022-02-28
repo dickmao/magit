@@ -4,7 +4,7 @@ endef
 
 ifneq ($(CASK),)
 CASK_DIR  = $(shell cd $(TOP) ; EMACS=$(EMACS) $(CASK) package-directory)
-$(CASK_DIR): $(TOP)Cask
+$(CASK_DIR): $(TOP)Cask $(TOP)lisp/magit-pkg.el
 	cd $(TOP) ; $(CASK) install
 	touch $(CASK_DIR)
 endif

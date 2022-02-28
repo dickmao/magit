@@ -41,7 +41,7 @@ GITSTATS      ?= gitstats
 GITSTATS_DIR  ?= $(TOP)docs/stats
 GITSTATS_ARGS ?= -c style=https://magit.vc/assets/stats.css -c max_authors=999
 
-BUILD_MAGIT_LIBGIT ?= false
+BUILD_MAGIT_LIBGIT ?= true
 
 ## Files #############################################################
 

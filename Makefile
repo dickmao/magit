@@ -274,19 +274,6 @@ define set_package_requires_melpa
     transient-version
     with-editor-version)))
 
-(with-temp-file "lisp/magit-libgit-pkg.el"
-  (insert (format
-"(define-package \"magit-libgit\" \"$(MAGIT_LIBGIT_VERSION)$(DEV_SUFFIX)\"
-  \".\"
-  '((emacs %S)
-    (libgit %S)
-    (magit %S))
-  :homepage \"https://magit.vc\"
-  :keywords '(\"git\" \"tools\" \"vc\"))
-"   emacs-version
-    libgit-version
-    magit-version)))
-
 (with-temp-file "lisp/magit-section-pkg.el"
   (insert (format
 "(define-package \"magit-section\" \"$(MAGIT_SECTION_VERSION)$(DEV_SUFFIX)\"

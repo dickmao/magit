@@ -8,7 +8,6 @@
         "docs/AUTHORS.md"
         "LICENSE"
         (:exclude "lisp/magit-libgit.el"
-                  "lisp/magit-libgit-pkg.el"
                   "lisp/magit-section.el"
                   "lisp/magit-section-pkg.el")
         ;; temporarily for stable:
