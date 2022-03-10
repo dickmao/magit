@@ -26,11 +26,10 @@ TAR      ?= tar
 SED      ?= sed
 
 CASK     ?= $(shell which cask)
+CASK     := cd $(TOP) ; EMACS=$(EMACS) $(CASK)
 EMACS    ?= emacs
 EMACSBIN := $(EMACS)
-ifneq ($(CASK),)
 LOAD_PATH = -L $(TOP)
-endif
 BATCH     = EMACSLOADPATH=$(EMACSLOADPATH) $(EMACS) -Q --batch $(LOAD_PATH)
 
 INSTALL_INFO     ?= $(shell command -v ginstall-info || printf install-info)
@@ -41,72 +40,17 @@ GITSTATS      ?= gitstats
 GITSTATS_DIR  ?= $(TOP)docs/stats
 GITSTATS_ARGS ?= -c style=https://magit.vc/assets/stats.css -c max_authors=999
 
-BUILD_MAGIT_LIBGIT ?= true
-
 ## Files #############################################################
 
 PKG       = magit
-PACKAGES  = magit magit-section git-commit
 
-TEXIPAGES = $(addsuffix .texi,$(filter-out git-commit,$(PACKAGES)))
-INFOPAGES = $(addsuffix .info,$(filter-out git-commit,$(PACKAGES)))
-HTMLFILES = $(addsuffix .html,$(filter-out git-commit,$(PACKAGES)))
-HTMLDIRS  = $(filter-out git-commit,$(PACKAGES))
-PDFFILES  = $(addsuffix .pdf,$(filter-out git-commit,$(PACKAGES)))
-EPUBFILES = $(addsuffix .epub,$(filter-out git-commit,$(PACKAGES)))
+TEXIPAGES = $(addsuffix .texi,$(PKG))
+INFOPAGES = $(addsuffix .info,$(PKG))
+HTMLFILES = $(addsuffix .html,$(PKG))
+HTMLDIRS  = $(PKG)
+PDFFILES  = $(addsuffix .pdf,$(PKG))
+EPUBFILES = $(addsuffix .epub,$(PKG))
 
-ELS  = git-commit.el
-ELS += magit-section.el
-ELS += magit-base.el
-ifeq "$(BUILD_MAGIT_LIBGIT)" "true"
-ELS += magit-libgit.el
-endif
-ELS += magit-git.el
-ELS += magit-mode.el
-ELS += magit-margin.el
-ELS += magit-process.el
-ELS += magit-transient.el
-ELS += magit-autorevert.el
-ELS += magit-core.el
-ELS += magit-diff.el
-ELS += magit-log.el
-ELS += magit-wip.el
-ELS += magit-reflog.el
-ELS += magit-apply.el
-ELS += magit-repos.el
-ELS += magit.el
-ELS += magit-status.el
-ELS += magit-refs.el
-ELS += magit-files.el
-ELS += magit-reset.el
-ELS += magit-branch.el
-ELS += magit-merge.el
-ELS += magit-tag.el
-ELS += magit-worktree.el
-ELS += magit-notes.el
-ELS += magit-obsolete.el
-ELS += magit-sequence.el
-ELS += magit-commit.el
-ELS += magit-remote.el
-ELS += magit-clone.el
-ELS += magit-fetch.el
-ELS += magit-pull.el
-ELS += magit-push.el
-ELS += magit-patch.el
-ELS += magit-bisect.el
-ELS += magit-stash.el
-ELS += magit-blame.el
-ELS += magit-sparse-checkout.el
-ELS += magit-submodule.el
-ELS += magit-subtree.el
-ELS += magit-ediff.el
-ELS += magit-gitignore.el
-ELS += magit-bundle.el
-ELS += magit-extras.el
-ELS += git-rebase.el
-ELS += magit-bookmark.el
-ELCS = $(ELS:.el=.elc)
-ELMS = magit.el $(filter-out $(addsuffix .el,$(PACKAGES)),$(ELS))
 ELGS = magit-autoloads.el magit-version.el
 
 ## Versions ##########################################################
@@ -118,111 +62,17 @@ TIMESTAMP = 20211004
 
 DASH_VERSION          = 2.19.1
 GIT_COMMIT_VERSION    = $(VERSION)
-LIBGIT_VERSION        = 0
+LIBGIT2_VERSION       = 0
 MAGIT_VERSION         = $(VERSION)
-MAGIT_LIBGIT_VERSION  = $(VERSION)
 MAGIT_SECTION_VERSION = $(VERSION)
 TRANSIENT_VERSION     = 0.3.6
 WITH_EDITOR_VERSION   = 3.0.5
-
-DASH_MELPA_SNAPSHOT          = 20210826
-GIT_COMMIT_MELPA_SNAPSHOT    = $(TIMESTAMP)
-LIBGIT_MELPA_SNAPSHOT        = 0
-MAGIT_MELPA_SNAPSHOT         = $(TIMESTAMP)
-MAGIT_LIBGIT_MELPA_SNAPSHOT  = $(TIMESTAMP)
-MAGIT_SECTION_MELPA_SNAPSHOT = $(TIMESTAMP)
-TRANSIENT_MELPA_SNAPSHOT     = 20210920
-WITH_EDITOR_MELPA_SNAPSHOT   = 20211001
-
-EMACS_VERSION        = 25.1
-LIBGIT_EMACS_VERSION = 26.1
+EMACS_VERSION	      = 25.1
 
 EMACSOLD := $(shell $(BATCH) --eval \
   "(and (version< emacs-version \"$(EMACS_VERSION)\") (princ \"true\"))")
 ifeq "$(EMACSOLD)" "true"
   $(error At least version $(EMACS_VERSION) of Emacs is required)
-endif
-
-## Load-Path #########################################################
-
-ifndef LOAD_PATH
-
-USER_EMACS_DIR = $(HOME)/.emacs.d
-ifeq "$(wildcard $(USER_EMACS_DIR))" ""
-  XDG_CONFIG_DIR = $(or $(XDG_CONFIG_HOME),$(HOME)/.config)
-  ifneq "$(wildcard $(XDG_CONFIG_DIR)/emacs)" ""
-    USER_EMACS_DIR = $(XDG_CONFIG_DIR)/emacs
-  endif
-endif
-
-ELPA_DIR ?= $(USER_EMACS_DIR)/elpa
-
-DASH_DIR ?= $(shell \
-  find -L $(ELPA_DIR) -maxdepth 1 -regex '.*/dash-[.0-9]*' 2> /dev/null | \
-  sort | tail -n 1)
-ifeq "$(DASH_DIR)" ""
-  DASH_DIR = $(TOP)../dash
-endif
-
-LIBGIT_DIR ?= $(shell \
-  find -L $(ELPA_DIR) -maxdepth 1 -regex '.*/libgit-[.0-9]*' 2> /dev/null | \
-  sort | tail -n 1)
-ifeq "$(LIBGIT_DIR)" ""
-  LIBGIT_DIR = $(TOP)../libgit
-endif
-
-TRANSIENT_DIR ?= $(shell \
-  find -L $(ELPA_DIR) -maxdepth 1 -regex '.*/transient-[.0-9]*' 2> /dev/null | \
-  sort | tail -n 1)
-ifeq "$(TRANSIENT_DIR)" ""
-  TRANSIENT_DIR = $(TOP)../transient/lisp
-endif
-
-WITH_EDITOR_DIR ?= $(shell \
-  find -L $(ELPA_DIR) -maxdepth 1 -regex '.*/with-editor-[.0-9]*' 2> /dev/null | \
-  sort | tail -n 1)
-ifeq "$(WITH_EDITOR_DIR)" ""
-  WITH_EDITOR_DIR = $(TOP)../with-editor/lisp
-endif
-
-MAGIT_SECTION_DIR ?= $(shell \
-  find -L $(ELPA_DIR) -maxdepth 1 -regex '.*/magit-section-[.0-9]*' 2> /dev/null | \
-  sort | tail -n 1)
-
-SYSTYPE := $(shell $(EMACSBIN) -Q --batch --eval "(princ system-type)")
-ifeq ($(SYSTYPE), windows-nt)
-  CYGPATH := $(shell cygpath --version 2>/dev/null)
-endif
-
-LOAD_PATH = -L $(TOP)lisp
-
-# When making changes here, then don't forget to adjust "Makefile",
-# ".github/workflows/test.yml", ".github/ISSUE_TEMPLATE/bug_report.md",
-# `magit-emacs-Q-command' and the "Installing from the Git Repository"
-# info node accordingly.  Also don't forget to "rgrep \b<pkg>\b".
-
-ifdef CYGPATH
-  LOAD_PATH += -L $(shell cygpath --mixed $(DASH_DIR))
-  LOAD_PATH += -L $(shell cygpath --mixed $(LIBGIT_DIR))
-  LOAD_PATH += -L $(shell cygpath --mixed $(TRANSIENT_DIR))
-  LOAD_PATH += -L $(shell cygpath --mixed $(WITH_EDITOR_DIR))
-  ifneq "$(MAGIT_SECTION_DIR)" ""
-    LOAD_PATH += -L $(shell cygpath --mixed $(MAGIT_SECTION_DIR))
-  endif
-else
-  LOAD_PATH += -L $(DASH_DIR)
-  LOAD_PATH += -L $(LIBGIT_DIR)
-  LOAD_PATH += -L $(TRANSIENT_DIR)
-  LOAD_PATH += -L $(WITH_EDITOR_DIR)
-  ifneq "$(MAGIT_SECTION_DIR)" ""
-    LOAD_PATH += -L $(MAGIT_SECTION_DIR)
-  endif
-endif
-
-endif # ifndef LOAD_PATH
-
-ifndef ORG_LOAD_PATH
-ORG_LOAD_PATH = -L ../../org/lisp
 endif
 
 ## Publish ###########################################################

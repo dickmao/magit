@@ -4,101 +4,40 @@ include ../cask.mk
 
 ## ###################################################################
 
-.PHONY: magit-version.el check-declare install
-
 .DEFAULT_GOAL := all
 all: lisp
 
-## Build order #######################################################
+.PHONY: compile
+compile: cask
+	! ($(CASK) eval "(let ((byte-compile-error-on-warn t)) (cask-cli/build))" 2>&1 \
+	   | egrep -a "(Warning|Error):") ; \
+	(ret=$$? ; $(CASK) clean-elc && exit $$ret)
 
-git-commit.elc:
-magit-section.elc:
-magit-base.elc:            magit-section.elc
-ifeq "$(BUILD_MAGIT_LIBGIT)" "true"
-magit-libgit.elc:
-magit-git.elc:             magit-base.elc magit-libgit.elc
-else
-magit-git.elc:             magit-base.elc
-endif
-magit-mode.elc:            magit-base.elc magit-git.elc
-magit-margin.elc:          magit-base.elc magit-mode.elc
-magit-process.elc:         magit-base.elc magit-git.elc magit-mode.elc
-magit-transient.elc:       magit-git.elc magit-mode.elc magit-process.elc
-magit-autorevert.elc:      magit-git.elc magit-process.elc
-magit-core.elc:            magit-base.elc magit-git.elc magit-mode.elc \
-                           magit-margin.elc magit-process.elc \
-                           magit-transient.elc magit-autorevert.elc
-magit-diff.elc:            git-commit.elc magit-core.elc
-magit-log.elc:             magit-core.elc magit-diff.elc
-magit-wip.elc:             magit-core.elc magit-log.elc
-magit-reflog.elc:          magit-core.elc magit-log.elc
-magit-apply.elc:           magit-core.elc magit-diff.elc magit-wip.elc
-magit-repos.elc:           magit-core.elc
-magit.elc:                 git-commit.elc magit-core.elc magit-diff.elc \
-                           magit-log.elc magit-apply.elc magit-repos.elc
-magit-status.elc:          magit.elc
-magit-refs.elc:            magit.elc
-magit-files.elc:           magit.elc
-magit-reset.elc:           magit.elc
-magit-branch.elc:          magit.elc magit-reset.elc
-magit-merge.elc:           magit.elc magit-diff.elc
-magit-tag.elc:             magit.elc
-magit-worktree.elc:        magit.elc
-magit-notes.elc:           magit.elc
-magit-sequence.elc:        magit.elc
-magit-commit.elc:          magit.elc magit-sequence.elc
-magit-remote.elc:          magit.elc
-magit-clone.elc:           magit.elc
-magit-fetch.elc:           magit.elc
-magit-pull.elc:            magit.elc magit-remote.elc
-magit-push.elc:            magit.elc
-magit-bisect.elc:          magit.elc
-magit-stash.elc:           magit.elc magit-sequence.elc magit-reflog.elc
-magit-blame.elc:           magit.elc
-magit-obsolete.elc:        magit.elc
-magit-submodule.elc:       magit.elc
-magit-patch.elc:           magit.elc
-magit-subtree.elc:         magit.elc
-magit-ediff.elc:           magit.elc
-magit-gitignore.elc:       magit.elc
-magit-sparse-checkout.elc: magit.elc
-magit-bundle.elc:          magit.elc
-magit-extras.elc:          magit.elc magit-merge.elc
-git-rebase.elc:            magit.elc
-magit-bookmark.elc:        magit.elc
-magit-obsolete.elc:        magit.elc
+.PHONY: lisp
+lisp: compile autoloads $(LISP_EXTRA_TARGETS)
 
-## Build #############################################################
-
-lisp:       cask $(ELCS) loaddefs $(LISP_EXTRA_TARGETS)
-loaddefs:   $(PKG)-autoloads.el
+.PHONY: versionlib
 versionlib: $(PKG)-version.el
 
-%.elc: %.el
-	@printf "Compiling $<\n"
-	@$(BATCH) --eval "(progn\
-	(when (file-exists-p \"$@\")\
-	  (delete-file \"$@\"))\
-	(setq with-editor-emacsclient-executable nil)\
-	$$suppress_warnings)" \
-	-f batch-byte-compile $<
-
-$(PKG)-autoloads.el: $(ELS)
-	@printf "Generating $@\n"
-	@printf "%s" "$$LOADDEFS_TMPL" > $@
+.PHONY: autoloads
+autoloads:
+	@printf "Generating $(PKG)-autoloads.el\n"
+	@printf "%s" "$$LOADDEFS_TMPL" > $(PKG)-autoloads.el
 	@$(BATCH) --eval "(progn\
 	(fset 'message (lambda (&rest _)))\
 	(setq make-backup-files nil)\
 	(setq vc-handled-backends nil)\
 	(setq default-directory (file-truename default-directory))\
-	(setq generated-autoload-file (expand-file-name \"$@\"))\
+	(setq generated-autoload-file (expand-file-name \"$(PKG)-autoloads.el\"))\
 	(setq find-file-visit-truename t)\
 	(update-directory-autoloads default-directory))"
 
+.PHONY: $(PKG)-version.el
 $(PKG)-version.el:
 	@printf "Generating $@\n"
 	@printf "%s" "$$VERSIONLIB_TMPL" > $@
 
+.PHONY: check-declare
 check-declare:
 	@printf "Checking function declarations\n"
 	@$(BATCH) -L $(TOP)../borg -L $(TOP)../forge/lisp \
@@ -106,9 +45,14 @@ check-declare:
 
 ## Install ###########################################################
 
-install: lisp versionlib
-	@$(MKDIR) $(DESTDIR)$(lispdir)
-	$(CP) $(ELS) magit-autoloads.el magit-version.el $(ELCS) $(DESTDIR)$(lispdir)
+.PHONY: dist
+dist: lisp versionlib
+	$(CASK) package
+
+.PHONY: install
+install: dist
+	$(EMACS) -Q --batch --eval "(package-initialize)" \
+	  --eval "(package-install-file \"dist/$(PKG)-$(shell $(CASK) version).tar\")"
 
 ## Clean #############################################################
 

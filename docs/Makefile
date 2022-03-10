@@ -84,7 +84,7 @@ clean:
 
 ## Release management ################################################
 
-ORG_ARGS  = --batch -Q $(ORG_LOAD_PATH) -l ol-man
+ORG_ARGS  = --batch -Q -l ol-man
 ORG_EVAL += --eval "(progn $$ORG_MAN_EXPORT)"
 ORG_EVAL += --eval "(setq indent-tabs-mode nil)"
 ORG_EVAL += --eval "(setq org-src-preserve-indentation nil)"

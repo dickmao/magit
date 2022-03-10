@@ -75,34 +75,34 @@
 
 ;;; Git implementations
 
-(defvar magit-inhibit-libgit nil
-  "Whether to inhibit the use of libgit.")
+(defvar magit-inhibit-libgit2 nil
+  "Whether to inhibit the use of libgit2.")
 
-(defvar magit--libgit-available-p 'unknown
-  "Whether libgit is available.
+(defvar magit--libgit2-available-p 'unknown
+  "Whether libgit2 is available.
 Use the function by the same name instead of this variable.")
 
-(defun magit--libgit-available-p ()
-  (if (eq magit--libgit-available-p 'unknown)
-      (setq magit--libgit-available-p
+(defun magit--libgit2-available-p ()
+  (if (eq magit--libgit2-available-p 'unknown)
+      (setq magit--libgit2-available-p
             (and module-file-suffix
-                 (let ((libgit (locate-library "libgit")))
-                   (and libgit
-                        (or (locate-library "libegit2")
+                 (let ((libgit2 (locate-library "libgit2")))
+                   (and libgit2
+                        (or (locate-library "libgit2_el")
                             (let ((load-path
                                    (cons (expand-file-name
                                           (convert-standard-filename "build")
-                                          (file-name-directory libgit))
+                                          (file-name-directory libgit2))
                                          load-path)))
-                              (locate-library "libegit2")))))))
-    magit--libgit-available-p))
+                              (locate-library "libgit2_el")))))))
+    magit--libgit2-available-p))
 
 (defun magit-gitimpl ()
   "Return the Git implementation used in this repository."
-  (if (and (not magit-inhibit-libgit)
+  (if (and (not magit-inhibit-libgit2)
            (not (file-remote-p default-directory))
-           (magit--libgit-available-p))
-      'libgit
+           (magit--libgit2-available-p))
+      'libgit2
     'git))
 
 ;;; Options

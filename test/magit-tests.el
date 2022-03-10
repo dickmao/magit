@@ -336,7 +336,7 @@ Enter passphrase for key '/home/user/.ssh/id_rsa': "
              '(unpushed . "@{upstream}..")
              (magit-rev-parse "--short" "master")))))
 
-;;; libgit
+;;; libgit2
 
 (ert-deftest magit-in-bare-repo ()
   "Test `magit-bare-repo-p' in a bare repository."

@@ -841,47 +841,6 @@ DEFAULT may be a number or a numeric string."
                            (string-to-number default)
                          default))))
 
-;;; Debug Utilities
-
-;;;###autoload
-(defun magit-emacs-Q-command ()
-  "Show a shell command that runs an uncustomized Emacs with only Magit loaded.
-See info node `(magit)Debugging Tools' for more information."
-  (interactive)
-  (let ((cmd (mapconcat
-              #'shell-quote-argument
-              `(,(concat invocation-directory invocation-name)
-                "-Q" "--eval" "(setq debug-on-error t)"
-                ,@(cl-mapcan
-                   (lambda (dir) (list "-L" dir))
-                   (delete-dups
-                    (cl-mapcan
-                     (lambda (lib)
-                       (let ((path (locate-library lib)))
-                         (cond
-                          (path
-                           (list (file-name-directory path)))
-                          ((not (equal lib "libgit"))
-                           (error "Cannot find mandatory dependency %s" lib)))))
-                     '(;; Like `LOAD_PATH' in `default.mk'.
-                       "dash"
-                       "libgit"
-                       "transient"
-                       "with-editor"
-                       ;; Obviously `magit' itself is needed too.
-                       "magit"
-                       ;; While these are part of the Magit repository,
-                       ;; they are distributed as separate packages.
-                       "magit-section"
-                       "git-commit"
-                       ))))
-                ;; Avoid Emacs bug#16406 by using full path.
-                "-l" ,(file-name-sans-extension (locate-library "magit")))
-              " ")))
-    (message "Uncustomized Magit command saved to kill-ring, %s"
-             "please run it in a terminal.")
-    (kill-new cmd)))
-
 ;;; Text Utilities
 
 (defmacro magit-bind-match-strings (varlist string &rest body)

@@ -35,7 +35,6 @@
 (require 'magit-core)
 (require 'magit-diff)
 (require 'magit-wip)
-
 (require 'transient) ; See #3732.
 
 ;; For `magit-apply'
