@@ -5,9 +5,6 @@ TOP := $(dir $(lastword $(MAKEFILE_LIST)))
 # You can override these settings in "config.mk" or on the command
 # line.
 #
-# You might also want to set LOAD_PATH.  If you do, then it must
-# contain "-L .".
-#
 # If you don't do so, then the default is set in the "Load-Path"
 # section below.  The default assumes that all dependencies are
 # installed either at "../<DEPENDENCY>", or when using package.el
@@ -29,8 +26,7 @@ CASK     ?= $(shell which cask)
 CASK     := cd $(TOP) ; EMACS=$(EMACS) $(CASK)
 EMACS    ?= emacs
 EMACSBIN := $(EMACS)
-LOAD_PATH = -L $(TOP)
-BATCH     = EMACSLOADPATH=$(EMACSLOADPATH) $(EMACS) -Q --batch $(LOAD_PATH)
+BATCH     = EMACSLOADPATH=$(EMACSLOADPATH) $(EMACS) -Q --batch
 
 INSTALL_INFO     ?= $(shell command -v ginstall-info || printf install-info)
 MAKEINFO         ?= makeinfo

@@ -37,12 +37,6 @@ $(PKG)-version.el:
 	@printf "Generating $@\n"
 	@printf "%s" "$$VERSIONLIB_TMPL" > $@
 
-.PHONY: check-declare
-check-declare:
-	@printf "Checking function declarations\n"
-	@$(BATCH) -L $(TOP)../borg -L $(TOP)../forge/lisp \
-	--eval "(check-declare-directory default-directory)"
-
 ## Install ###########################################################
 
 .PHONY: dist

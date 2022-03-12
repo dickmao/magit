@@ -8,7 +8,7 @@ include default.mk
 	test test-interactive magit \
 	clean clean-lisp clean-docs clean-archives \
 	stats \
-	dist versionlib magit-$(VERSION).tar.gz
+	dist versionlib $(PKG)-$(VERSION).tar.gz
 
 all: lisp docs
 
@@ -52,7 +52,6 @@ help:
 	$(info make test             - run tests)
 	$(info make test-interactive - run tests interactively)
 	$(info make emacs-Q          - run emacs -Q plus Magit)
-	$(info make check-declare    - check function declarations)
 	$(info )
 	$(info Release Management)
 	$(info ==================)
@@ -108,15 +107,6 @@ test:
 test-interactive:
 	@$(MAKE) -C test test-interactive
 
-emacs-Q: clean-lisp
-	@$(EMACSBIN) -Q $(LOAD_PATH) --debug-init --eval "(progn\
-	(setq debug-on-error t)\
-	(require 'magit)\
-	(global-set-key \"\\C-xg\" 'magit-status))"
-
-check-declare:
-	@$(MAKE) -C lisp check-declare
-
 ## Clean #############################################################
 
 clean: clean-lisp clean-docs clean-archives
@@ -133,7 +123,7 @@ clean-docs:
 
 clean-archives:
 	@$(RM) *.tar.gz *.tar lisp/magit-version.el
-	@$(RMDIR) magit-$(VERSION)
+	@$(RMDIR) $(PKG)-$(VERSION)
 
 clean-all: clean clean-stats
 

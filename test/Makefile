@@ -11,7 +11,7 @@ test: cask
 	(ert-run-tests-batch-and-exit))"
 
 test-interactive: cask
-	@EMACSLOADPATH=$(EMACSLOADPATH) $(EMACSBIN) -Q $(LOAD_PATH)\
+	@EMACSLOADPATH=$(EMACSLOADPATH) $(EMACSBIN) -Q \
 	--eval "(progn\
 	(load-file \"$(TOP)test/magit-tests.el\")\
 	(ert t))"
