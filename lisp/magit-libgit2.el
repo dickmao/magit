@@ -36,10 +36,7 @@
 (require 'subr-x)
 
 (require 'magit-git)
-
 (require 'libgit2)
-
-;;; Utilities
 
 (defun magit-libgit2-repo (&optional directory)
   "Return an object for the repository in DIRECTORY.
@@ -51,16 +48,13 @@ If optional DIRECTORY is nil, then use `default-directory'."
         (cons default-directory 'magit-libgit2-repo)
       (libgit2-repository-open default-directory))))
 
-;;; Methods
-
 (cl-defmethod magit-bare-repo-p
   (&context ((magit-gitimpl) (eql libgit2)) &optional noerror)
-  (and (magit--assert-default-directory noerror)
-       (if-let ((repo (magit-libgit2-repo)))
-           (libgit2-repository-bare-p repo)
-         (unless noerror
-           (signal 'magit-outside-git-repo default-directory)))))
+  (when (magit--assert-default-directory noerror)
+    (if-let ((repo (magit-libgit2-repo)))
+        (libgit2-repository-bare-p repo)
+      (unless noerror
+        (signal 'magit-outside-git-repo default-directory)))))
 
-;;; _
 (provide 'magit-libgit2)
 ;;; magit-libgit2.el ends here
