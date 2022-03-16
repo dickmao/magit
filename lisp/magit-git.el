@@ -73,38 +73,6 @@
   (cl-pushnew 'orig-rev eieio--known-slot-names)
   (cl-pushnew 'number eieio--known-slot-names))
 
-;;; Git implementations
-
-(defvar magit-inhibit-libgit2 nil
-  "Whether to inhibit the use of libgit2.")
-
-(defvar magit--libgit2-available-p 'unknown
-  "Whether libgit2 is available.
-Use the function by the same name instead of this variable.")
-
-(defun magit--libgit2-available-p ()
-  (if (eq magit--libgit2-available-p 'unknown)
-      (setq magit--libgit2-available-p
-            (and module-file-suffix
-                 (let ((libgit2 (locate-library "libgit2")))
-                   (and libgit2
-                        (or (locate-library "libgit2_el")
-                            (let ((load-path
-                                   (cons (expand-file-name
-                                          (convert-standard-filename "build")
-                                          (file-name-directory libgit2))
-                                         load-path)))
-                              (locate-library "libgit2_el")))))))
-    magit--libgit2-available-p))
-
-(defun magit-gitimpl ()
-  "Return the Git implementation used in this repository."
-  (if (and (not magit-inhibit-libgit2)
-           (not (file-remote-p default-directory))
-           (magit--libgit2-available-p))
-      'libgit2
-    'git))
-
 ;;; Options
 
 ;; For now this is shared between `magit-process' and `magit-git'.
@@ -1394,7 +1362,11 @@ Git."
 
 (defun magit-ref-abbrev (refname)
   "Return an unambiguous abbreviation of REFNAME."
-  (magit-rev-parse "--verify" "--abbrev-ref" refname))
+  (condition-case err
+      (libgit2-reference-shorthand
+       (cdr (libgit2-revparse-ext
+             (libgit2-repository-open default-directory) refname)))
+    (giterr-config nil)))
 
 (defun magit-ref-fullname (refname)
   "Return fully qualified refname for REFNAME.
@@ -1539,7 +1511,11 @@ to, or to some other symbolic-ref that points to the same ref."
 (defun magit-get-current-branch ()
   "Return the refname of the currently checked out branch.
 Return nil if no branch is currently checked out."
-  (magit-git-string "symbolic-ref" "--short" "HEAD"))
+  (file-name-nondirectory
+   (libgit2-reference-symbolic-target
+    (libgit2-reference-lookup
+     (libgit2-repository-open default-directory)
+     "HEAD"))))
 
 (defvar magit-get-previous-branch-timeout 0.5
   "Maximum time to spend in `magit-get-previous-branch'.

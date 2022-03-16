@@ -1431,7 +1431,7 @@ Unless specified, REPOSITORY is the current buffer's repository."
 Remove the repository's entry from `magit-repository-local-cache',
 remove the host's entry from `magit--host-git-version-cache', set
 `magit-section-visibility-cache' to nil for all Magit buffers of
-the repository and set `magit--libgit2-available-p' to `unknown'.
+the repository.
 
 With a prefix argument or if optional ALL is non-nil, discard the
 mentioned caches completely."
@@ -1455,8 +1455,7 @@ mentioned caches completely."
                             :key #'car :test #'equal)))
          (dolist (buffer (magit-mode-get-buffers))
            (with-current-buffer buffer
-             (setq magit-section-visibility-cache nil)))))
-  (setq magit--libgit2-available-p 'unknown))
+             (setq magit-section-visibility-cache nil))))))
 
 ;;; Imenu Support
 

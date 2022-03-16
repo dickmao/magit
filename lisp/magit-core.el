@@ -40,13 +40,6 @@
 (require 'magit-transient)
 (require 'magit-autorevert)
 
-(when (magit--libgit2-available-p)
-  (condition-case err
-      (require 'magit-libgit2)
-    (error
-     (setq magit-inhibit-libgit2 'error)
-     (message "Error while loading `magit-libgit2': %S" err))))
-
 (defgroup magit nil
   "Controlling Git from Emacs."
   :link '(url-link "https://magit.vc")
