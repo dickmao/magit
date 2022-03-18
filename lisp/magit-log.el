@@ -1105,6 +1105,14 @@ Type \\[magit-reset] to reset `HEAD' to the commit at point.
                        (concat " " it))
                   args)))
 
+(defun magit-insert-log* (rev-from &optional rev-to)
+  (magit-git-wash (apply-partially #'magit-log-wash-log 'log)
+    "log"
+    ;; %x0c is (he)x 0c [form feed]
+    ;; %s is subject
+    "--format=%%h%%x0c%D%%x0c%%x0c%%aN%%x0c%%x0c%%s"
+    ))
+
 (defun magit-insert-log (revs &optional args files)
   "Insert a log section.
 Do not add this to a hook variable."
@@ -1806,7 +1814,7 @@ then show the last `magit-log-section-commit-count' commits."
 
 (defun magit-insert-unpushed-to-upstream ()
   "Insert commits that haven't been pushed to the upstream yet."
-  (when (magit-git-success "rev-parse" "@{upstream}")
+  (when (magit-rev-verify "@{upstream}")
     (magit-insert-section (unpushed "@{upstream}..")
       (magit-insert-heading
         (format (propertize "Unmerged into %s."
@@ -1819,16 +1827,13 @@ then show the last `magit-log-section-commit-count' commits."
   "Insert section showing recent commits.
 Show the last `magit-log-section-commit-count' commits."
   (let* ((start (format "HEAD~%s" magit-log-section-commit-count))
-         (range (and (magit-rev-verify start)
-                     (concat start "..HEAD"))))
+         (range (when (magit-rev-verify start)
+                  (concat start "..HEAD"))))
     (magit-insert-section ((eval (or type 'recent))
                            (or value range)
                            t)
       (magit-insert-heading "Recent commits")
-      (magit-insert-log range
-                        (cons (format "-n%d" magit-log-section-commit-count)
-                              (--remove (string-prefix-p "-n" it)
-                                        magit-buffer-log-args))))))
+      (magit-insert-log* start))))
 
 (magit-define-section-jumper magit-jump-to-unpushed-to-pushremote
   "Unpushed to <push-remote>" unpushed

@@ -1244,7 +1244,12 @@ string \"true\", otherwise return nil."
   (equal (magit-git-str "rev-parse" args) "true"))
 
 (defun magit-rev-verify (rev)
-  (magit-git-string-p "rev-parse" "--verify" rev))
+  (ignore-errors
+    (libgit2-commit-id
+     (libgit2-revparse-single
+      (libgit2-repository-open default-directory)
+      rev))))
+(defalias 'magit-rev-commit-id #'magit-rev-verify)
 
 (defun magit-commit-p (rev)
   "Return full hash for REV if it names an existing commit."
@@ -1266,7 +1271,13 @@ string \"true\", otherwise return nil."
 
 (defun magit-rev-ancestor-p (a b)
   "Return non-nil if commit A is an ancestor of commit B."
-  (magit-git-success "merge-base" "--is-ancestor" a b))
+  (let* ((repo (libgit2-repository-open default-directory))
+         (commit-a (libgit2-revparse-single repo a))
+         (commit-b (libgit2-revparse-single repo b)))
+    (libgit2-graph-descendant-p
+     repo
+     (libgit2-commit-id commit-a)
+     (libgit2-commit-id commit-b))))
 
 (defun magit-rev-head-p (rev)
   (or (equal rev "HEAD")
