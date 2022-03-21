@@ -30,7 +30,7 @@
 ;;; Code:
 
 (require 'magit-base)
-
+(require 'libgit2)
 (require 'format-spec)
 
 ;; From `magit-branch'.
@@ -527,9 +527,12 @@ output, call `magit-cancel-section'.  Otherwise temporarily narrow
 the buffer to the inserted text, move to its beginning, and then
 call function WASHER with ARGS as its sole argument."
   (declare (indent 1))
-  (let ((beg (point)))
-    (setq args (-flatten args))
-    (magit-git-insert args)
+  (let ((beg (point))
+        (new-school (functionp (car-safe args))))
+    (if new-school
+        (apply (car args) (cdr args))
+      (setq args (-flatten args))
+      (magit-git-insert args))
     (if (= (point) beg)
         (magit-cancel-section)
       (unless (bolp)
@@ -1373,11 +1376,11 @@ Git."
 
 (defun magit-ref-abbrev (refname)
   "Return an unambiguous abbreviation of REFNAME."
-  (condition-case err
+  (condition-case nil
       (libgit2-reference-shorthand
        (cdr (libgit2-revparse-ext
              (libgit2-repository-open default-directory) refname)))
-    (giterr-config nil)))
+    (giterr-config)))
 
 (defun magit-ref-fullname (refname)
   "Return fully qualified refname for REFNAME.

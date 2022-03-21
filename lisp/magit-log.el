@@ -1105,13 +1105,45 @@ Type \\[magit-reset] to reset `HEAD' to the commit at point.
                        (concat " " it))
                   args)))
 
-(defun magit-insert-log* (rev-from &optional rev-to)
+(defun magit-insert-log* (revs)
   (magit-git-wash (apply-partially #'magit-log-wash-log 'log)
-    "log"
-    ;; %x0c is (he)x 0c [form feed]
-    ;; %s is subject
-    "--format=%%h%%x0c%D%%x0c%%x0c%%aN%%x0c%%x0c%%s"
-    ))
+    (lambda ()
+      (let* ((repo (libgit2-repository-open default-directory))
+             (walk (libgit2-revwalk-new repo))
+             (refs-alist
+              (let (result)
+                (libgit2-reference-foreach
+                 repo
+                 (lambda (ref)
+                   (when (libgit2-reference-direct-p ref)
+                     (push (libgit2-reference-shorthand ref)
+                           (alist-get (magit-rev-commit-id
+                                       repo
+                                       (libgit2-reference-shorthand ref))
+                                      result nil nil #'equal)))))
+                result)))
+        (libgit2-revwalk-push-range walk revs)
+        (libgit2-revwalk-foreach
+         walk
+         (lambda (id)
+           (let ((commit (libgit2-commit-lookup repo id)))
+             (insert (libgit2-object-short-id commit)
+                     #x0c
+                     (mapconcat
+                      #'identity
+                      (alist-get id refs-alist nil nil #'equal)
+                      ", ")
+                     #x0c
+                     #x0c
+                     (libgit2-signature-name (libgit2-commit-author commit))
+                     #x0c
+                     (number-to-string
+                      (truncate
+                       (float-time
+                        (encode-time (libgit2-commit-time commit)))))
+                     #x0c
+                     (libgit2-commit-summary commit)
+                     "\n"))))))))
 
 (defun magit-insert-log (revs &optional args files)
   "Insert a log section.
