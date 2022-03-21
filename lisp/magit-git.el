@@ -1246,11 +1246,11 @@ Return t if the first (and usually only) output line is the
 string \"true\", otherwise return nil."
   (equal (magit-git-str "rev-parse" args) "true"))
 
-(defun magit-rev-verify (rev)
+(defun magit-rev-verify (rev &optional repo)
   (ignore-errors
     (libgit2-commit-id
      (libgit2-revparse-single
-      (libgit2-repository-open default-directory)
+      (or repo (libgit2-repository-open default-directory))
       rev))))
 (defalias 'magit-rev-commit-id #'magit-rev-verify)
 

@@ -1118,8 +1118,8 @@ Type \\[magit-reset] to reset `HEAD' to the commit at point.
                    (when (libgit2-reference-direct-p ref)
                      (push (libgit2-reference-shorthand ref)
                            (alist-get (magit-rev-commit-id
-                                       repo
-                                       (libgit2-reference-shorthand ref))
+                                       (libgit2-reference-shorthand ref)
+                                       repo)
                                       result nil nil #'equal)))))
                 result)))
         (libgit2-revwalk-push-range walk revs)
