@@ -520,31 +520,36 @@ message and add a section in the respective process buffer."
     (apply #'magit-git-insert args)
     (split-string (buffer-string) "\0" t)))
 
-(defun magit-git-wash (washer &rest args)
+(cl-defun magit-git-wash (washer &rest args &key method &allow-other-keys)
   "Execute Git with ARGS, inserting washed output at point.
 Actually first insert the raw output at point.  If there is no
 output, call `magit-cancel-section'.  Otherwise temporarily narrow
 the buffer to the inserted text, move to its beginning, and then
 call function WASHER with ARGS as its sole argument."
   (declare (indent 1))
-  (let ((beg (point))
-        (new-school (functionp (car-safe args))))
-    (if new-school
-        (apply (car args) (cdr args))
-      (setq args (-flatten args))
+  (let ((beg (point)))
+    (setq args (-flatten args))
+    (if method
+        (progn
+          (funcall method)
+          (let ((where (cl-position :method args :test #'eq))
+                (new-args (copy-sequence args)))
+            (setf (nthcdr where new-args) (nthcdr (+ 2 where) args))
+            (setq args new-args)))
       (magit-git-insert args))
-    (if (= (point) beg)
-        (magit-cancel-section)
-      (unless (bolp)
-        (insert "\n"))
-      (save-restriction
-        (narrow-to-region beg (point))
-        (goto-char beg)
-        (funcall washer args))
-      (when (or (= (point) beg)
-                (= (point) (1+ beg)))
-        (magit-cancel-section))
-      (magit-maybe-make-margin-overlay))))
+    (let ((start (float-time)))
+      (if (= (point) beg)
+          (magit-cancel-section)
+        (unless (bolp)
+          (insert "\n"))
+        (save-restriction
+          (narrow-to-region beg (point))
+          (goto-char beg)
+          (funcall washer args))
+        (when (or (= (point) beg)
+                  (= (point) (1+ beg)))
+          (magit-cancel-section))
+        (magit-maybe-make-margin-overlay)))))
 
 ;;; Git Version
 

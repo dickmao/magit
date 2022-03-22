@@ -1838,10 +1838,13 @@ behind of the current branch, then show the commits that have
 not yet been pushed into the upstream branch.  If no upstream is
 configured or if the upstream is not behind of the current branch,
 then show the last `magit-log-section-commit-count' commits."
-  (let ((upstream (magit-get-upstream-branch)))
+  (let ((start (float-time))
+        (upstream (magit-get-upstream-branch)))
     (if (or (not upstream)
             (magit-rev-ancestor-p "HEAD" upstream))
-        (magit-insert-recent-commits 'unpushed "@{upstream}..")
+        (progn
+          (message "speedu: %S" (- (float-time) start))
+          (magit-insert-recent-commits 'unpushed "@{upstream}.."))
       (magit-insert-unpushed-to-upstream))))
 
 (defun magit-insert-unpushed-to-upstream ()
@@ -1865,7 +1868,7 @@ Show the last `magit-log-section-commit-count' commits."
                            (or value range)
                            t)
       (magit-insert-heading "Recent commits")
-      (magit-insert-log* start))))
+      (magit-insert-log range))))
 
 (magit-define-section-jumper magit-jump-to-unpushed-to-pushremote
   "Unpushed to <push-remote>" unpushed
