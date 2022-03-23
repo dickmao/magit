@@ -347,67 +347,6 @@ to do the following.
   "Execute Git with ARGS, returning t if its exit code is 1."
   (= (magit-git-exit-code args) 1))
 
-(defun magit-git-string-p (&rest args)
-  "Execute Git with ARGS, returning the first line of its output.
-If the exit code isn't zero or if there is no output, then return
-nil.  Neither of these results is considered an error; if that is
-what you want, then use `magit-git-string-ng' instead.
-
-This is an experimental replacement for `magit-git-string', and
-still subject to major changes."
-  (magit--with-refresh-cache (cons default-directory args)
-    (magit--with-temp-process-buffer
-      (and (zerop (magit-process-git t args))
-           (not (bobp))
-           (progn
-             (goto-char (point-min))
-             (buffer-substring-no-properties (point) (line-end-position)))))))
-
-(defun magit-git-string-ng (&rest args)
-  "Execute Git with ARGS, returning the first line of its output.
-If the exit code isn't zero or if there is no output, then that
-is considered an error, but instead of actually signaling an
-error, return nil.  Additionally the output is put in the process
-buffer (creating it if necessary) and the error message is shown
-in the status buffer (provided it exists).
-
-This is an experimental replacement for `magit-git-string', and
-still subject to major changes.  Also see `magit-git-string-p'."
-  (magit--with-refresh-cache
-      (list default-directory 'magit-git-string-ng args)
-    (magit--with-temp-process-buffer
-      (let* ((args (magit-process-git-arguments args))
-             (status (magit-process-git t args)))
-        (if (zerop status)
-            (and (not (bobp))
-                 (progn
-                   (goto-char (point-min))
-                   (buffer-substring-no-properties
-                    (point) (line-end-position))))
-          (let ((buf (current-buffer)))
-            (with-current-buffer (magit-process-buffer t)
-              (magit-process-insert-section default-directory
-                                            magit-git-executable args
-                                            status buf)))
-          (when-let ((status-buf (magit-get-mode-buffer 'magit-status-mode)))
-            (let ((msg (magit--locate-error-message)))
-              (with-current-buffer status-buf
-                (setq magit-this-error msg))))
-          nil)))))
-
-(defun magit-git-str (&rest args)
-  "Execute Git with ARGS, returning the first line of its output.
-If there is no output, return nil.  If the output begins with a
-newline, return an empty string.  Like `magit-git-string' but
-ignore `magit-git-debug'."
-  (setq args (-flatten args))
-  (magit--with-refresh-cache (cons default-directory args)
-    (magit--with-temp-process-buffer
-      (magit-process-git (list t nil) args)
-      (unless (bobp)
-        (goto-char (point-min))
-        (buffer-substring-no-properties (point) (line-end-position))))))
-
 (defun magit-git-output (&rest args)
   "Execute Git with ARGS, returning its output."
   (setq args (-flatten args))
@@ -488,36 +427,53 @@ add a section in the respective process buffer."
                          (lambda (re) (re-search-backward re nil t)))
        (match-string-no-properties 1)))
 
-(defun magit-git-string (&rest args)
+(defsubst magit-git--normalize-args (args)
+  "Make post-libgit2 ARGS look like pre-libgit2 args.
+This just removes :method from ARGS."
+  (let ((where (cl-position :method args :test #'eq))
+        (new-args (copy-sequence args)))
+    (when where
+      (setf (nthcdr where new-args) (nthcdr (+ 2 where) args)))
+    (-flatten new-args)))
+
+(cl-defun magit-git-string (&rest args &key method &allow-other-keys)
   "Execute Git with ARGS, returning the first line of its output.
 If there is no output, return nil.  If the output begins with a
 newline, return an empty string."
-  (setq args (-flatten args))
+  (setq args (magit-git--normalize-args args))
   (magit--with-refresh-cache (cons default-directory args)
     (magit--with-temp-process-buffer
-      (apply #'magit-git-insert args)
+      (if method
+          (funcall method)
+        (magit-git-insert args))
       (unless (bobp)
         (goto-char (point-min))
         (buffer-substring-no-properties (point) (line-end-position))))))
 
-(defun magit-git-lines (&rest args)
+(cl-defun magit-git-lines (&rest args &key method &allow-other-keys)
   "Execute Git with ARGS, returning its output as a list of lines.
 Empty lines anywhere in the output are omitted.
 
 If Git exits with a non-zero exit status, then report show a
 message and add a section in the respective process buffer."
+  (setq args (magit-git--normalize-args args))
   (magit--with-temp-process-buffer
-    (apply #'magit-git-insert args)
+    (if method
+        (funcall method)
+      (magit-git-insert args))
     (split-string (buffer-string) "\n" t)))
 
-(defun magit-git-items (&rest args)
+(cl-defun magit-git-items (&rest args &key method &allow-other-keys)
   "Execute Git with ARGS, returning its null-separated output as a list.
 Empty items anywhere in the output are omitted.
 
 If Git exits with a non-zero exit status, then report show a
 message and add a section in the respective process buffer."
+  (setq args (magit-git--normalize-args args))
   (magit--with-temp-process-buffer
-    (apply #'magit-git-insert args)
+    (if method
+        (funcall method)
+      (magit-git-insert args))
     (split-string (buffer-string) "\0" t)))
 
 (cl-defun magit-git-wash (washer &rest args &key method &allow-other-keys)
@@ -527,15 +483,10 @@ output, call `magit-cancel-section'.  Otherwise temporarily narrow
 the buffer to the inserted text, move to its beginning, and then
 call function WASHER with ARGS as its sole argument."
   (declare (indent 1))
+  (setq args (magit-git--normalize-args args))
   (let ((beg (point)))
-    (setq args (-flatten args))
     (if method
-        (progn
-          (funcall method)
-          (let ((where (cl-position :method args :test #'eq))
-                (new-args (copy-sequence args)))
-            (setf (nthcdr where new-args) (nthcdr (+ 2 where) args))
-            (setq args new-args)))
+        (funcall method)
       (magit-git-insert args))
     (if (= (point) beg)
         (magit-cancel-section)
@@ -714,7 +665,8 @@ Also see `magit-git-config-p'."
         (key (mapconcat 'identity keys ".")))
     (equal (if magit--refresh-cache
                (car (last (magit-config-get-from-cached-list key)))
-             (magit-git-str "config" arg "--bool" key))
+             (let (magit-git-debug)
+               (magit-git-string "config" arg "--bool" key)))
            "true")))
 
 (defun magit-set (value &rest keys)
@@ -1002,7 +954,7 @@ tracked file."
   (magit-git-success "ls-files" "--error-unmatch" file))
 
 (defun magit-list-files (&rest args)
-  (apply #'magit-git-items "ls-files" "-z" "--full-name" args))
+  (magit-git-items "ls-files" "-z" "--full-name" args))
 
 (defun magit-tracked-files ()
   (magit-list-files "--cached"))
@@ -1028,9 +980,9 @@ tracked file."
 (defun magit-binary-files (&rest args)
   (--mapcat (and (string-match "^-\t-\t\\(.+\\)" it)
                  (list (match-string 1 it)))
-            (apply #'magit-git-items
-                   "diff" "-z" "--numstat" "--ignore-submodules"
-                   args)))
+            (magit-git-items
+             "diff" "-z" "--numstat" "--ignore-submodules"
+             args)))
 
 (defun magit-unmerged-files ()
   (magit-git-items "diff-files" "-z" "--name-only" "--diff-filter=U"))
@@ -1224,13 +1176,14 @@ are considered."
 (defun magit-rev-parse (&rest args)
   "Execute `git rev-parse ARGS', returning first line of output.
 If there is no output, return nil."
-  (apply #'magit-git-string "rev-parse" args))
+  (magit-git-string "rev-parse" args))
 
 (defun magit-rev-parse-safe (&rest args)
   "Execute `git rev-parse ARGS', returning first line of output.
 If there is no output, return nil.  Like `magit-rev-parse' but
 ignore `magit-git-debug'."
-  (apply #'magit-git-str "rev-parse" args))
+  (let (magit-git-debug)
+    (magit-git-string "rev-parse" args)))
 
 (defun magit-rev-parse-true (&rest args)
   "Execute `git rev-parse ARGS', returning t if it prints \"true\".
@@ -1248,7 +1201,7 @@ signal an error."
   "Execute `git rev-parse ARGS', returning t if it prints \"true\".
 Return t if the first (and usually only) output line is the
 string \"true\", otherwise return nil."
-  (equal (magit-git-str "rev-parse" args) "true"))
+  (equal (let (magit-git-debug) (magit-git-string "rev-parse" args)) "true"))
 
 (defun magit-rev-verify (rev &optional repo)
   (ignore-errors
@@ -1769,8 +1722,9 @@ If optional WITH-DISTANCE is non-nil then return (TAG COMMITS),
 if it is `dirty' return (TAG COMMIT DIRTY). COMMITS is the number
 of commits in `HEAD' but not in TAG and DIRTY is t if there are
 uncommitted changes, nil otherwise."
-  (--when-let (magit-git-str "describe" "--long" "--tags"
-                             (and (eq with-distance 'dirty) "--dirty") rev)
+  (--when-let (let (magit-git-debug)
+                (magit-git-string "describe" "--long" "--tags"
+                                  (and (eq with-distance 'dirty) "--dirty") rev))
     (save-match-data
       (string-match
        "\\(.+\\)-\\(?:0[0-9]*\\|\\([0-9]+\\)\\)-g[0-9a-z]+\\(-dirty\\)?$" it)
@@ -1788,7 +1742,8 @@ If no such tag can be found or if the distance is 0 (in which
 case it is the current tag, not the next), return nil instead.
 If optional WITH-DISTANCE is non-nil, then return (TAG COMMITS)
 where COMMITS is the number of commits in TAG but not in REV."
-  (--when-let (magit-git-str "describe" "--contains" (or rev "HEAD"))
+  (--when-let (let (magit-git-debug)
+                (magit-git-string "describe" "--contains" (or rev "HEAD")))
     (save-match-data
       (when (string-match "^[^^~]+" it)
         (setq it (match-string 0 it))
