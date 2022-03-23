@@ -537,19 +537,18 @@ call function WASHER with ARGS as its sole argument."
             (setf (nthcdr where new-args) (nthcdr (+ 2 where) args))
             (setq args new-args)))
       (magit-git-insert args))
-    (let ((start (float-time)))
-      (if (= (point) beg)
-          (magit-cancel-section)
-        (unless (bolp)
-          (insert "\n"))
-        (save-restriction
-          (narrow-to-region beg (point))
-          (goto-char beg)
-          (funcall washer args))
-        (when (or (= (point) beg)
-                  (= (point) (1+ beg)))
-          (magit-cancel-section))
-        (magit-maybe-make-margin-overlay)))))
+    (if (= (point) beg)
+        (magit-cancel-section)
+      (unless (bolp)
+        (insert "\n"))
+      (save-restriction
+        (narrow-to-region beg (point))
+        (goto-char beg)
+        (funcall washer args))
+      (when (or (= (point) beg)
+                (= (point) (1+ beg)))
+        (magit-cancel-section))
+      (magit-maybe-make-margin-overlay))))
 
 ;;; Git Version
 
