@@ -1025,17 +1025,40 @@ range.  Otherwise, it can be any revision or range accepted by
                         "diff-tree" "-r" "--diff-filter=R" "-z" "-M"
                         revA revB))))
 
-(defun magit-file-status (&rest args)
-  (let ((repo (libgit2-repository-open default-directory)))
-    (libgit2-status-foreach-ext
-     repo
-     (lambda (path status)
-       (list path (buffer-substring pos (point)) x y)
-       (push (cons path (sort (libgit2-status-decode status)
-                              (lambda (a b) (string< (symbol-name a)
-                                                     (symbol-name b)))))
-             res))
-     show flags pathspec baseline)))
+(defun magit-file-status (&optional path)
+  (let ((repo (libgit2-repository-open default-directory))
+        result)
+    (cl-flet ((process (path status)
+                (let* ((space ? )
+                       (x ??)
+                       (y ??)
+                       (unmerged-p (memq 'conflicted status)))
+                  (push (apply #'list path nil
+                               (dolist (val status (list x y))
+                                 (pcase val
+                                   ('index-new (setq x ?A))
+                                   ('index-modified (setq x ?M))
+                                   ('index-deleted (setq x ?D))
+                                   ('index-renamed (setq x ?R))
+                                   ('index-typechange (setq x ?M))
+                                   ('wt-new (when (eq x ?A)
+                                              (setq x space y ?A)))
+                                   ('wt-modified (if unmerged-p
+                                                     (setq x ?U y ?U)
+                                                   (setq x space y ?M)))
+                                   ('wt-deleted (setq y ?D))
+                                   ('wt-typechange (setq y ?M))
+                                   ('wt-renamed (setq y ?R))
+                                   ('wt-unreadable (setq y space)))))
+                        result))))
+     (if path
+         (process path (libgit2-status-file repo path))
+       (libgit2-status-foreach-ext
+        repo
+        (lambda (path status)
+          (process path (libgit2-status-decode status)))
+        nil '(include-untracked))))
+    result))
 
 (defcustom magit-cygwin-mount-points
   (when (eq system-type 'windows-nt)
