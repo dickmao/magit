@@ -1203,11 +1203,14 @@ If there is no output, return nil."
                      (not (equal "-" (substring (car args) 0 1))))
             `(:method
               (lambda ()
-                (ignore-errors
-                  (libgit2-commit-id
-                   (libgit2-revparse-single
-                    (or ,repo (libgit2-repository-open default-directory))
-                    ,(car args)))))))
+                (when-let ((obj
+                            (condition-case nil
+                                (libgit2-revparse-single
+                                 (or ,repo (libgit2-repository-open default-directory))
+                                 ,(car args))
+                              (giterr-reference nil)))
+                           (commit-p (libgit2-commit-p obj)))
+                  (libgit2-commit-id obj)))))
           (cons "rev-parse" args))))
 
 (defun magit2-rev-parse-safe (&rest args)
