@@ -430,25 +430,29 @@ add a section in the respective process buffer."
 (defsubst magit2-git--normalize-args (args)
   "Make post-libgit2 ARGS look like pre-libgit2 args.
 This just removes :method from ARGS."
-  (let ((where (cl-position :method args :test #'eq))
-        (new-args (copy-sequence args)))
-    (when where
-      (setf (nthcdr where new-args) (nthcdr (+ 2 where) args)))
-    (-flatten new-args)))
+  (let (new-args
+        (i 0))
+    (while (< i (length args))
+      (let ((arg (nth i args)))
+        (if (keywordp arg)
+            (setq i (+ 2 i))
+          (setq i (+ 1 i))
+          (push arg new-args))))
+    (-flatten (reverse new-args))))
 
 (cl-defun magit2-git-string (&rest args &key method &allow-other-keys)
   "Execute Git with ARGS, returning the first line of its output.
 If there is no output, return nil.  If the output begins with a
 newline, return an empty string."
   (setq args (magit2-git--normalize-args args))
-  (magit2--with-refresh-cache (cons default-directory args)
-    (magit2--with-temp-process-buffer
-      (if method
-          (funcall method)
-        (magit2-git-insert args))
-      (unless (bobp)
-        (goto-char (point-min))
-        (buffer-substring-no-properties (point) (line-end-position))))))
+  (if method
+      (funcall method)
+    (magit2--with-refresh-cache (cons default-directory args)
+      (magit2--with-temp-process-buffer
+       (magit2-git-insert args)
+       (unless (bobp)
+         (goto-char (point-min))
+         (buffer-substring-no-properties (point) (line-end-position)))))))
 
 (cl-defun magit2-git-lines (&rest args &key method &allow-other-keys)
   "Execute Git with ARGS, returning its output as a list of lines.
@@ -1189,20 +1193,20 @@ are considered."
 
 ;;; Revisions and References
 
-(defun magit2-rev-parse (&rest args)
+(cl-defun magit2-rev-parse (&rest args &key repo &allow-other-keys)
   "Execute `git rev-parse ARGS', returning first line of output.
 If there is no output, return nil."
-  (when (and (= 1 (length args))
-             (not (equal "-" (substring (car args) 0 1))))
-    (push (lambda ()
-            (ignore-errors
-              (libgit2-commit-id
-               (libgit2-revparse-single
-                (libgit2-repository-open default-directory)
-                (car args)))))
-          args)
-    (push ":method" args))
-  (magit2-git-string "rev-parse" args))
+  (apply #'magit2-git-string "rev-parse"
+         `,@(append
+             args
+             (when (and (= 1 (length args))
+                        (not (equal "-" (substring (car args) 0 1))))
+               `(:method (lambda ()
+                           (ignore-errors
+                             (libgit2-commit-id
+                              (libgit2-revparse-single
+                               (or ,repo (libgit2-repository-open default-directory))
+                               ,(car args))))))))))
 
 (defun magit2-rev-parse-safe (&rest args)
   "Execute `git rev-parse ARGS', returning first line of output.

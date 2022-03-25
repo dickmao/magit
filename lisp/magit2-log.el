@@ -1112,42 +1112,43 @@ Do not add this to a hook variable."
          (remove "--literal-pathspecs" magit2-git-global-arguments))
         (method
          (lambda ()
-           (let* ((repo (libgit2-repository-open default-directory))
-                  (walk (libgit2-revwalk-new repo))
-                  (refs-alist
-                   (let (result)
-                     (libgit2-reference-foreach
-                      repo
-                      (lambda (ref)
-                        (when (libgit2-reference-direct-p ref)
-                          (push (libgit2-reference-shorthand ref)
-                                (alist-get (magit2-rev-commit-id
-                                            (libgit2-reference-shorthand ref)
-                                            repo)
-                                           result nil nil #'equal)))))
-                     result)))
-             (libgit2-revwalk-push-range walk revs)
-             (libgit2-revwalk-foreach
-              walk
-              (lambda (id)
-                (let ((commit (libgit2-commit-lookup repo id)))
-                  (insert (libgit2-object-short-id commit)
-                          #x0c
-                          (mapconcat
-                           #'identity
-                           (alist-get id refs-alist nil nil #'equal)
-                           ", ")
-                          #x0c
-                          #x0c
-                          (libgit2-signature-name (libgit2-commit-author commit))
-                          #x0c
-                          (number-to-string
-                           (truncate
-                            (float-time
-                             (encode-time (libgit2-commit-time commit)))))
-                          #x0c
-                          (libgit2-commit-summary commit)
-                          "\n"))))))))
+           (when revs
+             (let* ((repo (libgit2-repository-open default-directory))
+                    (walk (libgit2-revwalk-new repo))
+                    (refs-alist
+                     (let (result)
+                       (libgit2-reference-foreach
+                        repo
+                        (lambda (ref)
+                          (when (libgit2-reference-direct-p ref)
+                            (push (libgit2-reference-shorthand ref)
+                                  (alist-get (magit2-rev-commit-id
+                                              (libgit2-reference-shorthand ref)
+                                              :repo repo)
+                                             result nil nil #'equal)))))
+                       result)))
+               (libgit2-revwalk-push-range walk revs)
+               (libgit2-revwalk-foreach
+                walk
+                (lambda (id)
+                  (let ((commit (libgit2-commit-lookup repo id)))
+                    (insert (libgit2-object-short-id commit)
+                            #x0c
+                            (mapconcat
+                             #'identity
+                             (alist-get id refs-alist nil nil #'equal)
+                             ", ")
+                            #x0c
+                            #x0c
+                            (libgit2-signature-name (libgit2-commit-author commit))
+                            #x0c
+                            (number-to-string
+                             (truncate
+                              (float-time
+                               (encode-time (libgit2-commit-time commit)))))
+                            #x0c
+                            (libgit2-commit-summary commit)
+                            "\n")))))))))
     (magit2-git-wash (apply-partially #'magit2-log-wash-log 'log)
       :method method
       "log"
@@ -1650,7 +1651,7 @@ Type \\[magit2-log-select-quit] to abort without selecting a commit."
 (defun magit2-log-select-refresh-buffer ()
   (magit2-insert-section (logbuf)
     (magit2-insert-log magit2-buffer-revisions
-                      magit2-buffer-log-args)))
+                       magit2-buffer-log-args)))
 
 (cl-defmethod magit2-buffer-value (&context (major-mode magit2-log-select-mode))
   magit2-buffer-revisions)
