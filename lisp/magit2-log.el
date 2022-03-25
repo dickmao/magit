@@ -1120,11 +1120,12 @@ Do not add this to a hook variable."
                        (libgit2-reference-foreach
                         repo
                         (lambda (ref)
-                          (when (libgit2-reference-direct-p ref)
-                            (push (libgit2-reference-shorthand ref)
-                                  (alist-get (magit2-rev-commit-id
-                                              (libgit2-reference-shorthand ref)
-                                              :repo repo)
+                          (when-let ((short (libgit2-reference-shorthand ref))
+                                     (branch-p (libgit2-reference-branch-p ref))
+                                     (commit-id (magit2-rev-parse :repo repo
+                                                                  short)))
+                            (push short
+                                  (alist-get commit-id
                                              result nil nil #'equal)))))
                        result)))
                (libgit2-revwalk-push-range walk revs)
@@ -1865,7 +1866,9 @@ Show the last `magit2-log-section-commit-count' commits."
                            (or value range)
                            t)
       (magit2-insert-heading "Recent commits")
-      (magit2-insert-log range))))
+      (magit2-insert-log range (cons (format "-n%d" magit2-log-section-commit-count)
+                                     (--remove (string-prefix-p "-n" it)
+                                               magit2-buffer-log-args))))))
 
 (magit2-define-section-jumper magit2-jump-to-unpushed-to-pushremote
   "Unpushed to <push-remote>" unpushed

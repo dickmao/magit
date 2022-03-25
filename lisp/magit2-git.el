@@ -445,9 +445,9 @@ This just removes :method from ARGS."
 If there is no output, return nil.  If the output begins with a
 newline, return an empty string."
   (setq args (magit2-git--normalize-args args))
-  (if method
-      (funcall method)
-    (magit2--with-refresh-cache (cons default-directory args)
+  (magit2--with-refresh-cache (cons default-directory args)
+    (if method
+        (funcall method)
       (magit2--with-temp-process-buffer
        (magit2-git-insert args)
        (unless (bobp)
@@ -1196,17 +1196,19 @@ are considered."
 (cl-defun magit2-rev-parse (&rest args &key repo &allow-other-keys)
   "Execute `git rev-parse ARGS', returning first line of output.
 If there is no output, return nil."
-  (apply #'magit2-git-string "rev-parse"
-         `,@(append
-             args
-             (when (and (= 1 (length args))
-                        (not (equal "-" (substring (car args) 0 1))))
-               `(:method (lambda ()
-                           (ignore-errors
-                             (libgit2-commit-id
-                              (libgit2-revparse-single
-                               (or ,repo (libgit2-repository-open default-directory))
-                               ,(car args))))))))))
+  (setq args (magit2-git--normalize-args args))
+  (apply #'magit2-git-string
+         (append
+          (when (and (= 1 (length args))
+                     (not (equal "-" (substring (car args) 0 1))))
+            `(:method
+              (lambda ()
+                (ignore-errors
+                  (libgit2-commit-id
+                   (libgit2-revparse-single
+                    (or ,repo (libgit2-repository-open default-directory))
+                    ,(car args)))))))
+          (cons "rev-parse" args))))
 
 (defun magit2-rev-parse-safe (&rest args)
   "Execute `git rev-parse ARGS', returning first line of output.
@@ -1232,8 +1234,6 @@ signal an error."
 Return t if the first (and usually only) output line is the
 string \"true\", otherwise return nil."
   (equal (let (magit2-git-debug) (magit2-git-string "rev-parse" args)) "true"))
-
-(defalias 'magit2-rev-commit-id #'magit2-rev-parse)
 
 (defun magit2-rev-hash (rev)
   "Return full hash for REV if it names an existing commit."
