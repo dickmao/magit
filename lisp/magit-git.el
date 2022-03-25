@@ -1026,23 +1026,16 @@ range.  Otherwise, it can be any revision or range accepted by
                         revA revB))))
 
 (defun magit-file-status (&rest args)
-  (magit--with-temp-process-buffer
-    (save-excursion (magit-git-insert "status" "-z" args))
-    (let ((pos (point)) status)
-      (while (> (skip-chars-forward "[:print:]") 0)
-        (let ((x (char-after     pos))
-              (y (char-after (1+ pos)))
-              (file (buffer-substring (+ pos 3) (point))))
-          (forward-char)
-          (if (memq x '(?R ?C))
-              (progn
-                (setq pos (point))
-                (skip-chars-forward "[:print:]")
-                (push (list file (buffer-substring pos (point)) x y) status)
-                (forward-char))
-            (push (list file nil x y) status)))
-        (setq pos (point)))
-      status)))
+  (let ((repo (libgit2-repository-open default-directory)))
+    (libgit2-status-foreach-ext
+     repo
+     (lambda (path status)
+       (list path (buffer-substring pos (point)) x y)
+       (push (cons path (sort (libgit2-status-decode status)
+                              (lambda (a b) (string< (symbol-name a)
+                                                     (symbol-name b)))))
+             res))
+     show flags pathspec baseline)))
 
 (defcustom magit-cygwin-mount-points
   (when (eq system-type 'windows-nt)
