@@ -400,7 +400,7 @@ current branch or `HEAD' as the start-point."
 If optional REF is non-nil, show reflog for that instead.
 If optional HEADING is non-nil, use that as section heading
 instead of \"Stashes:\"."
-  (let ((verified (magit-rev-verify ref))
+  (let ((verified (magit-rev-parse ref))
         (autostash (magit-rebase--get-state-lines "autostash")))
     (when (or autostash verified)
       (magit-insert-section (stashes ref)
@@ -557,7 +557,7 @@ that make up the stash."
   "Insert section showing the untracked files commit of the stash."
   (let ((stash magit-buffer-revision)
         (rev (concat magit-buffer-revision "^3")))
-    (when (magit-rev-verify rev)
+    (when (magit-rev-parse rev)
       (magit-stash-insert-section (format "%s^3" stash)
                                   (format "%s^..%s^3" stash stash)
                                   "Untracked files"

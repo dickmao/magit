@@ -226,7 +226,7 @@ Also see https://github.com/magit/magit/issues/4132."
   (magit-completing-read prompt (magit-list-refnames)
                          nil nil nil history
                          (or default
-                             (and (magit-rev-verify "ORIG_HEAD")
+                             (and (magit-rev-parse "ORIG_HEAD")
                                   "ORIG_HEAD"))))
 
 ;;; Commands

@@ -1306,7 +1306,7 @@ for a revision."
       (when module
         (setq default-directory
               (expand-file-name (file-name-as-directory module))))
-      (unless (magit-commit-p rev)
+      (unless (magit-rev-hash rev)
         (user-error "%s is not a commit" rev))
       (let ((buf (magit-revision-setup-buffer rev args files)))
         (when file
@@ -2553,12 +2553,12 @@ or a ref which is not a branch, then it inserts nothing."
                             (`quicker  ; false negatives (number-less hashes)
                              (and (>= (length text) 7)
                                   (string-match-p "[0-9]" text)
-                                  (magit-commit-p text)))
+                                  (magit-rev-hash text)))
                             (`quick    ; false negatives (short hashes)
                              (and (>= (length text) 7)
-                                  (magit-commit-p text)))
+                                  (magit-rev-hash text)))
                             (`slow
-                             (magit-commit-p text)))
+                             (magit-rev-hash text)))
                       (put-text-property beg (point)
                                          'font-lock-face 'magit-hash)
                       (let ((end (point)))
@@ -2764,7 +2764,7 @@ or a ref which is not a branch, then it inserts nothing."
 
 (defun magit-merge-preview-refresh-buffer ()
   (let* ((branch (magit-get-current-branch))
-         (head (or branch (magit-rev-verify "HEAD"))))
+         (head (or branch (magit-rev-parse "HEAD"))))
     (magit-set-header-line-format (format "Preview merge of %s into %s"
                                           magit-buffer-revision
                                           (or branch "HEAD")))

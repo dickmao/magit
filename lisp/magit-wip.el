@@ -313,7 +313,7 @@ commit message."
   (cond
    ((and (not (equal parent wipref))
          (or (not magit-wip-merge-branch)
-             (not (magit-rev-verify wipref))))
+             (not (magit-rev-parse wipref))))
     (setq start-msg (concat "start autosaving " start-msg))
     (magit-update-ref wipref start-msg
                       (magit-git-string "commit-tree" "--no-gpg-sign"
@@ -350,13 +350,13 @@ commit message."
 
 (defun magit-wip-get-ref ()
   (let ((ref (or (magit-git-string "symbolic-ref" "HEAD") "HEAD")))
-    (and (magit-rev-verify ref)
+    (and (magit-rev-parse ref)
          ref)))
 
 (defun magit-wip-get-parent (ref wipref)
-  (if (and (magit-rev-verify wipref)
+  (if (and (magit-rev-parse wipref)
            (equal (magit-git-string "merge-base" wipref ref)
-                  (magit-rev-verify ref)))
+                  (magit-rev-parse ref)))
       wipref
     ref))
 

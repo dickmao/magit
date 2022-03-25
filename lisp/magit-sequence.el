@@ -902,7 +902,7 @@ If no such sequence is in progress, do nothing."
             patch commit)
         (while patches
           (setq patch (pop patches))
-          (setq commit (magit-commit-p
+          (setq commit (magit-rev-hash
                         (cadr (split-string (magit-file-line patch)))))
           (cond ((and commit patches)
                  (magit-sequence-insert-commit

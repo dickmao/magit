@@ -300,7 +300,7 @@ does."
   (interactive
    (let ((arg (magit-read-other-branch-or-commit "Checkout")))
      (list arg
-           (and (not (magit-commit-p arg))
+           (and (not (magit-rev-hash arg))
                 (magit-read-starting-point "Create and checkout branch" arg)))))
   (when (string-match "\\`heads/\\(.+\\)" arg)
     (setq arg (match-string 1 arg)))
@@ -395,7 +395,7 @@ when using `magit-branch-and-checkout'."
 (defun magit-branch-read-args (prompt &optional default-start)
   (if magit-branch-read-upstream-first
       (let ((choice (magit-read-starting-point prompt nil default-start)))
-        (if (magit-rev-verify choice)
+        (if (magit-rev-parse choice)
             (list (magit-read-string-ns
                    (if magit-completing-read--silent-default
                        (format "%s (starting at `%s')" prompt choice)

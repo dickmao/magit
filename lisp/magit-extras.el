@@ -845,7 +845,7 @@ abbreviated revision to the `kill-ring' and the
                                (match-string 1 magit-buffer-range)
                              magit-buffer-range))
                           (magit-status-mode "HEAD")))))
-      (when (magit-commit-p rev)
+      (when (magit-rev-hash rev)
         (setq rev (magit-rev-parse
                    (and magit-copy-revision-abbreviated "--short")
                    rev))

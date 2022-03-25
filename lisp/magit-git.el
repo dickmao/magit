@@ -1113,7 +1113,7 @@ Sorted from longest to shortest CYGWIN name."
 
 (defun magit-no-commit-p ()
   "Return t if there is no commit in the current Git repository."
-  (not (magit-rev-verify "HEAD")))
+  (not (magit-rev-parse "HEAD")))
 
 (defun magit-merge-commit-p (commit)
   "Return t if COMMIT is a merge commit."
@@ -1169,6 +1169,16 @@ are considered."
 (defun magit-rev-parse (&rest args)
   "Execute `git rev-parse ARGS', returning first line of output.
 If there is no output, return nil."
+  (when (and (= 1 (length args))
+             (not (equal "-" (substring (car args) 0 1))))
+    (push (lambda ()
+            (ignore-errors
+              (libgit2-commit-id
+               (libgit2-revparse-single
+                (libgit2-repository-open default-directory)
+                (car args)))))
+          args)
+    (push ":method" args))
   (magit-git-string "rev-parse" args))
 
 (defun magit-rev-parse-safe (&rest args)
@@ -1196,21 +1206,11 @@ Return t if the first (and usually only) output line is the
 string \"true\", otherwise return nil."
   (equal (let (magit-git-debug) (magit-git-string "rev-parse" args)) "true"))
 
-(defun magit-rev-verify (rev &optional repo)
-  (ignore-errors
-    (libgit2-commit-id
-     (libgit2-revparse-single
-      (or repo (libgit2-repository-open default-directory))
-      rev))))
-(defalias 'magit-rev-commit-id #'magit-rev-verify)
+(defalias 'magit-rev-commit-id #'magit-rev-parse)
 
-(defun magit-commit-p (rev)
+(defun magit-rev-hash (rev)
   "Return full hash for REV if it names an existing commit."
-  (magit-rev-verify (concat rev "^{commit}")))
-
-(defalias 'magit-rev-verify-commit 'magit-commit-p)
-
-(defalias 'magit-rev-hash 'magit-commit-p)
+  (magit-rev-parse (concat rev "^{commit}")))
 
 (defun magit-rev-equal (a b)
   "Return t if there are no differences between the commits A and B."
@@ -1218,8 +1218,8 @@ string \"true\", otherwise return nil."
 
 (defun magit-rev-eq (a b)
   "Return t if A and B refer to the same commit."
-  (let ((a (magit-commit-p a))
-        (b (magit-commit-p b)))
+  (let ((a (magit-rev-hash a))
+        (b (magit-rev-hash b)))
     (and a b (equal a b))))
 
 (defun magit-rev-ancestor-p (a b)
@@ -1273,7 +1273,7 @@ Git."
             (let ((namespace (substring pattern 0 -1)))
               (and (not (or (string-suffix-p "HEAD" ref)
                             (and (string-match-p namespace ref)
-                                 (not (magit-rev-verify
+                                 (not (magit-rev-parse
                                        (concat namespace ref))))))
                    ref))
           ref))
@@ -1496,7 +1496,7 @@ The amount of time spent searching is limited by
         (i 1) prev)
     (while (if (> (- (float-time) t0) magit-get-previous-branch-timeout)
                (setq prev nil) ;; Timed out.
-             (and (setq prev (magit-rev-verify (format "@{-%i}" i)))
+             (and (setq prev (magit-rev-parse (format "@{-%i}" i)))
                   (or (not (setq prev (magit-rev-branch prev)))
                       (equal prev current))))
       (cl-incf i))
@@ -1605,7 +1605,7 @@ according to the branch type."
                (remote (magit-get-push-remote branch))
                (target (concat remote "/" branch)))
       (and (or (not verify)
-               (magit-rev-verify target))
+               (magit-rev-parse target))
            (magit--propertize-face target 'magit-branch-remote)))))
 
 (defun magit-get-@{push}-branch (&optional branch)
@@ -1806,7 +1806,7 @@ SORTBY is a key or list of keys to pass to the `--sort' flag of
 
 (defun magit-list-branches-pointing-at (commit)
   (let ((re (format "\\`%s refs/\\(heads\\|remotes\\)/\\(.*\\)\\'"
-                    (magit-rev-verify commit))))
+                    (magit-rev-parse commit))))
     (--keep (and (string-match re it)
                  (let ((name (match-string 2 it)))
                    (and (not (string-suffix-p "HEAD" name))
@@ -2242,9 +2242,9 @@ and this option only controls what face is used.")
     (or (if (magit-git-version>= "2.6.0")
             (zerop (magit-call-git "update-ref" "--create-reflog"
                                    "-m" message ref rev
-                                   (or (magit-rev-verify ref) "")))
+                                   (or (magit-rev-parse ref) "")))
           ;; `--create-reflog' didn't exist before v2.6.0
-          (let ((oldrev  (magit-rev-verify ref))
+          (let ((oldrev  (magit-rev-parse ref))
                 (logfile (magit-git-dir (concat "logs/" ref))))
             (unless (file-exists-p logfile)
               (when oldrev
@@ -2255,7 +2255,7 @@ and this option only controls what face is used.")
                 (magit-git-success "update-ref" "-m" "enable reflog"
                                    ref oldrev ""))))
           (magit-git-success "update-ref" "-m" message ref rev
-                             (or (magit-rev-verify ref) "")))
+                             (or (magit-rev-parse ref) "")))
         (error "Cannot update %s with %s" ref rev))))
 
 (defconst magit-range-re
@@ -2295,7 +2295,7 @@ and this option only controls what face is used.")
     (let ((text (buffer-substring-no-properties (car it) (cdr it))))
       (and (>= (length text) 7)
            (string-match-p "[a-z]" text)
-           (magit-commit-p text)
+           (magit-rev-hash text)
            text))))
 
 ;;; Completion

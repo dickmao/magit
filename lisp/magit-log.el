@@ -840,7 +840,7 @@ https://github.com/mhagger/git-when-merged."
                  (to (if (<= to 0)
                          branch
                        (format "%s~%s" branch to))))
-            (unless (magit-rev-verify-commit from)
+            (unless (magit-rev-parse from)
               (setq from (magit-git-string "rev-list" "--max-parents=0"
                                            commit)))
             (magit-log-setup-buffer (list (concat from ".." to))
@@ -1845,7 +1845,7 @@ then show the last `magit-log-section-commit-count' commits."
 
 (defun magit-insert-unpushed-to-upstream ()
   "Insert commits that haven't been pushed to the upstream yet."
-  (when (magit-rev-verify "@{upstream}")
+  (when (magit-rev-parse "@{upstream}")
     (magit-insert-section (unpushed "@{upstream}..")
       (magit-insert-heading
         (format (propertize "Unmerged into %s."
@@ -1858,7 +1858,7 @@ then show the last `magit-log-section-commit-count' commits."
   "Insert section showing recent commits.
 Show the last `magit-log-section-commit-count' commits."
   (let* ((start (format "HEAD~%s" magit-log-section-commit-count))
-         (range (when (magit-rev-verify start)
+         (range (when (magit-rev-parse start)
                   (concat start "..HEAD"))))
     (magit-insert-section ((eval (or type 'recent))
                            (or value range)

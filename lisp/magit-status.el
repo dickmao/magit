@@ -506,7 +506,7 @@ If there is no blob buffer in the same frame, then do nothing."
   "Insert header sections appropriate for `magit-status-mode' buffers.
 The sections are inserted by running the functions on the hook
 `magit-status-headers-hook'."
-  (if (magit-rev-verify "HEAD")
+  (if (magit-rev-parse "HEAD")
       (magit-insert-headers 'magit-status-headers-hook)
     (insert "In the beginning there was darkness\n\n")))
 
@@ -633,7 +633,7 @@ arguments are for internal use only."
     (magit-insert-section (branch target)
       (insert (format "%-10s" "Push: "))
       (insert
-       (if (magit-rev-verify target)
+       (if (magit-rev-parse target)
            (concat (and magit-status-show-hashes-in-headers
                         (concat (propertize (magit-rev-format "%h" target)
                                             'font-lock-face 'magit-hash)

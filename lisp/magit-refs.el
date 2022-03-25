@@ -310,7 +310,7 @@ Type \\[magit-reset] to reset `HEAD' to the commit at point.
 
 (defun magit-refs-refresh-buffer ()
   (setq magit-set-buffer-margin-refresh (not (magit-buffer-margin-p)))
-  (unless (magit-rev-verify magit-buffer-upstream)
+  (unless (magit-rev-parse magit-buffer-upstream)
     (setq magit-refs-show-commit-count nil))
   (magit-set-header-line-format
    (format "%s %s" magit-buffer-upstream
@@ -646,7 +646,7 @@ line is inserted at all."
       (let* ((headp (equal head "*"))
              (pushp (and push
                          magit-refs-show-push-remote
-                         (magit-rev-verify p:ref)
+                         (magit-rev-parse p:ref)
                          (not (equal p:ref u:ref))))
              (branch-desc
               (if branch
