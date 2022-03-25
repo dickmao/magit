@@ -10,34 +10,34 @@ Changes since v1.1.2
 
  * Diffs are optionally refined using `diff-refine-hunk'.
 
- * Added library `magit-blame.el' defining new mode
-   `magit-blame-mode'.
+ * Added library `magit2-blame.el' defining new mode
+   `magit2-blame-mode'.
 
- * Added library `magit-wip.el' defining new modes
-   `magit-wip-save-mode' and `magit-wip-mode'.
+ * Added library `magit2-wip.el' defining new modes
+   `magit2-wip-save-mode' and `magit2-wip-mode'.
 
- * New section movement commands; `magit-goto-next-sibling-section'
-   and `magit-goto-previous-sibling-section'.
+ * New section movement commands; `magit2-goto-next-sibling-section'
+   and `magit2-goto-previous-sibling-section'.
 
- * Added command `magit-file-log'.
+ * Added command `magit2-file-log'.
 
- * Added command `magit-manual-merge'.
+ * Added command `magit2-manual-merge'.
 
- * `magit-delete-branch-force' was merged into `magit-delete-branch'.
+ * `magit2-delete-branch-force' was merged into `magit2-delete-branch'.
 
- * `magit-move-branch' learned to force the rename.
+ * `magit2-move-branch' learned to force the rename.
 
- * `magit-reset-working-tree' learned to remove ignored files.
+ * `magit2-reset-working-tree' learned to remove ignored files.
 
- * `magit-pull' learned to set `branch.BRANCH.merge'.
+ * `magit2-pull' learned to set `branch.BRANCH.merge'.
 
- * `magit-log-edit' learned to respect GIT_AUTHOR_EMAIL,
+ * `magit2-log-edit' learned to respect GIT_AUTHOR_EMAIL,
    GIT_AUTHOR_NAME and GIT_AUTHOR_DATE.
 
- * `magit-visit-item' learned to visit untracked files, diffs and
+ * `magit2-visit-item' learned to visit untracked files, diffs and
    hunks.
 
- * Added option `magit-sha1-abbrev-length'.
+ * Added option `magit2-sha1-abbrev-length'.
 
 Authors
 -------

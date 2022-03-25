@@ -8,9 +8,9 @@
 /lisp/*-autoloads.el
 /lisp/*.elc
 
-/docs/magit/
-/docs/magit-section/
-/lisp/magit-version.el
+/docs/magit2/
+/docs/magit2-section/
+/lisp/magit2-version.el
 
 /docs/*.epub
 /docs/META-INF/

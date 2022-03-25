@@ -33,19 +33,19 @@ jobs:
     - name: Checkout transient
       uses: actions/checkout@v2
       with:
-        repository: magit/transient
+        repository: magit2/transient
         path: transient
     - name: Checkout with-editor
       uses: actions/checkout@v2
       with:
-        repository: magit/with-editor
+        repository: magit2/with-editor
         path: with-editor
-    - name: Checkout magit
+    - name: Checkout magit2
       uses: actions/checkout@v2
       with:
-        repository: magit/magit
-        path: magit
-    - name: Build magit
-      run: make -C magit all
-    - name: Test magit
-      run: make -C magit test
+        repository: magit2/magit2
+        path: magit2
+    - name: Build magit2
+      run: make -C magit2 all
+    - name: Test magit2
+      run: make -C magit2 test

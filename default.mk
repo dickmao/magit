@@ -12,9 +12,9 @@ TOP := $(dir $(lastword $(MAKEFILE_LIST)))
 
 PREFIX   ?= /usr/local
 sharedir ?= $(PREFIX)/share
-lispdir  ?= $(sharedir)/emacs/site-lisp/magit
+lispdir  ?= $(sharedir)/emacs/site-lisp/magit2
 infodir  ?= $(sharedir)/info
-docdir   ?= $(sharedir)/doc/magit
+docdir   ?= $(sharedir)/doc/magit2
 
 CP       ?= install -p -m 644
 MKDIR    ?= install -p -m 755 -d
@@ -34,11 +34,11 @@ MANUAL_HTML_ARGS ?= --css-ref /assets/page.css
 
 GITSTATS      ?= gitstats
 GITSTATS_DIR  ?= $(TOP)docs/stats
-GITSTATS_ARGS ?= -c style=https://magit.vc/assets/stats.css -c max_authors=999
+GITSTATS_ARGS ?= -c style=https://magit2.vc/assets/stats.css -c max_authors=999
 
 ## Files #############################################################
 
-PKG       = magit
+PKG       = magit2
 
 TEXIPAGES = $(addsuffix .texi,$(PKG))
 INFOPAGES = $(addsuffix .info,$(PKG))
@@ -47,7 +47,7 @@ HTMLDIRS  = $(PKG)
 PDFFILES  = $(addsuffix .pdf,$(PKG))
 EPUBFILES = $(addsuffix .epub,$(PKG))
 
-ELGS = magit-autoloads.el magit-version.el
+ELGS = magit2-autoloads.el magit2-version.el
 
 ## Versions ##########################################################
 
@@ -73,7 +73,7 @@ endif
 
 ## Publish ###########################################################
 
-DOMAIN      ?= magit.vc
+DOMAIN      ?= magit2.vc
 CFRONT_DIST ?= E2LUHBKU1FBV02
 
 PUBLISH_TARGETS ?= html html-dir pdf

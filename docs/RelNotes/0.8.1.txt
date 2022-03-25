@@ -8,13 +8,13 @@ Changes since v0.8.0
 
  * New library `rebase-mode.el'.  Edit Git rebase files.
 
- * New commands `magit-log-all' and `magit-log-first-parent'.
+ * New commands `magit2-log-all' and `magit2-log-first-parent'.
 
- * New command `magit-git-command'.  Run any Git command.
+ * New command `magit2-git-command'.  Run any Git command.
 
- * `magit-remote-update' learned to fetch just the current remote.
+ * `magit2-remote-update' learned to fetch just the current remote.
 
- * `magit-tag' learned to place the tag on something other than HEAD.
+ * `magit2-tag' learned to place the tag on something other than HEAD.
 
 Authors
 -------

@@ -23,28 +23,28 @@ and then going through the steps again should result in a backtrace.
 
 Also post the output of:
 
-    M-x magit-version RET
+    M-x magit2-version RET
 
 Before reporting a defect please try to reproduce it using an Emacs instance in which only Magit and its dependencies have been loaded. Other packages or your configuration should not be loaded. This makes it easier to determine whether the issue lays with Magit or something else.
 
 If you run Magit from its Git repository, then you can do so using:
 
-    $ cd /path/to/magit
+    $ cd /path/to/magit2
     $ make emacs-Q
 
 Alternatively, run:
 
-    M-x magit-emacs-Q-command RET
+    M-x magit2-emacs-Q-command RET
 
 to save a shell command to the `kill-ring` and the system's clip-board, which you can then copy into a shell to run.
 
 Finally, if that didn't work and you have installed Magit from Melpa, then run commands similar to the ones above, but use tab completion to replace the various Ns with the correct versions:
 
-    $ cd ~/.emacs.d/elpa/magit-N
-    $ emacs -Q --debug-init --eval '(setq debug-on-error t)' -L ../dash-N -L ../git-commit-N -L ../transient-N -L ../with-editor-N -L ../ghub-N -L . -l magit
+    $ cd ~/.emacs.d/elpa/magit2-N
+    $ emacs -Q --debug-init --eval '(setq debug-on-error t)' -L ../dash-N -L ../git-commit-N -L ../transient-N -L ../with-editor-N -L ../ghub-N -L . -l magit2
 
 More debugging tools are described in the manual.
 
-    https://magit.vc/manual/magit/Debugging-Tools.html
+    https://magit2.vc/manual/magit2/Debugging-Tools.html
 
 ---- now delete this line and everything above ----

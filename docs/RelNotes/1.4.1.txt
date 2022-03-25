@@ -8,11 +8,11 @@ This is a bugfix release.
 Changes since v1.4.0
 --------------------
 
- * The external library `magit-log-edit.el' is no longer supported.
+ * The external library `magit2-log-edit.el' is no longer supported.
    If it is still installed, then instruct the user to remove it.
 
- * The function `magit-maybe-show-setup-instructions' is now run even
-   when `magit' has not been loaded by the time `after-init-hook' ran.
+ * The function `magit2-maybe-show-setup-instructions' is now run even
+   when `magit2' has not been loaded by the time `after-init-hook' ran.
 
  * Invalid `:package-version' keywords in option definitions were
    fixed.  In some cases the value was "2.1.0" instead of "1.4.0".

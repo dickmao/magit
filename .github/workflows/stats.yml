@@ -8,11 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install gitstats
-        uses: magit/actions/install-gitstats@main
+        uses: magit2/actions/install-gitstats@main
       - name: Generate statistics
-        uses: magit/actions/stats-generate@main
+        uses: magit2/actions/stats-generate@main
       - name: Publish statistics
-        uses: magit/actions/stats-publish@main
+        uses: magit2/actions/stats-publish@main
         with:
           key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           secret: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

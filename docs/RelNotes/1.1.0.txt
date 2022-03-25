@@ -10,65 +10,65 @@ Changes since v1.0.0
 
  * Completely redesigned existing faces.
 
- * Added library `magit-classic-theme.el' for users who like the old
+ * Added library `magit2-classic-theme.el' for users who like the old
    faces better.
 
  * Share many more key bindings between all Magit modes.  Previously
    many commands were only available in certain buffers, even though
    they are useful in all Magit buffers.
 
- * Added library `magit-simple-keys.el' for users who don't like the
+ * Added library `magit2-simple-keys.el' for users who don't like the
    popups.
 
  * Added support for using Ido to do completion.
 
  * Added support for Ediff.
 
- * Added shell script `magit'.
+ * Added shell script `magit2'.
 
- * Added library `magit-bisect.el'.
+ * Added library `magit2-bisect.el'.
 
- * Added library `magit-stgit.el'.
+ * Added library `magit2-stgit.el'.
 
- * Added mode `magit-svn-mode'.
+ * Added mode `magit2-svn-mode'.
 
- * Added mode `magit-topgit-mode'.
+ * Added mode `magit2-topgit-mode'.
 
- * Added mode `magit-rebase-mode'.
+ * Added mode `magit2-rebase-mode'.
 
  * Added buttons to commit buffer to cylce to commits which were
-   previously shown.  The commands are `magit-show-commit-backward'
-   and `magit-show-commit-forward.
+   previously shown.  The commands are `magit2-show-commit-backward'
+   and `magit2-show-commit-forward.
 
  * Defined backward compatibility implementations of some Emacs
    functions.
 
  * Type changes are now shown in diffs.
  
- * Added option `magit-set-upstream-on-push'.
+ * Added option `magit2-set-upstream-on-push'.
 
- * Added option `magit-default-tracking-name-function'.
+ * Added option `magit2-default-tracking-name-function'.
 
- * Added option `magit-log-auto-more'.
+ * Added option `magit2-log-auto-more'.
 
- * Added option `magit-create-branch-behaviour'.
+ * Added option `magit2-create-branch-behaviour'.
 
- * Added option `magit-status-buffer-switch-function'.
+ * Added option `magit2-status-buffer-switch-function'.
 
- * Added option `magit-rewrite-inclusive'.
+ * Added option `magit2-rewrite-inclusive'.
 
- * Added options `magit-highlight-trailing-whitespace' and
-   `magit-highlight-indentation'.
+ * Added options `magit2-highlight-trailing-whitespace' and
+   `magit2-highlight-indentation'.
 
- * Added command `magit-show'.  Visit REVISION:FILE.
+ * Added command `magit2-show'.  Visit REVISION:FILE.
 
- * Added command `magit-delete-branch-forced'.
+ * Added command `magit2-delete-branch-forced'.
 
- * Added command `magit-log-edit-toggle-author'.
+ * Added command `magit2-log-edit-toggle-author'.
 
- * `magit-reset-working-tree' learned to remove untracked files.
+ * `magit2-reset-working-tree' learned to remove untracked files.
 
- * `magit-push' learned to set the upstream branch.
+ * `magit2-push' learned to set the upstream branch.
 
 Authors
 -------

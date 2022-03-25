@@ -44,53 +44,53 @@ using them for more than a year now.
 Changes since v1.2.2
 --------------------
 
- * The libraries `magit-topgit.el', `magit-stgit.el', and
-   `magit-svn.el' all reincarnated as separate repository.
+ * The libraries `magit2-topgit.el', `magit2-stgit.el', and
+   `magit2-svn.el' all reincarnated as separate repository.
 
- * The libraries `magit-classic-theme.el' and `magit-simple-keys.el',
+ * The libraries `magit2-classic-theme.el' and `magit2-simple-keys.el',
    which allowed users to undo some of the changes in older releases,
    were removed.
 
  * The library `rebase-mode.el' was renamed to `git-rebase-mode.el'
-   and moved to the `magit/git-modes' repository.
+   and moved to the `magit2/git-modes' repository.
 
- * The library `magit-log-edit-mode.el' was removed and replaced with
-   `git-commit-mode.el' from the `magit/git-modes' repository.
+ * The library `magit2-log-edit-mode.el' was removed and replaced with
+   `git-commit-mode.el' from the `magit2/git-modes' repository.
 
- * The functionality provided by the library `magit-bisect.el' was
-   replaced with a new implementation in `magit.el'.
+ * The functionality provided by the library `magit2-bisect.el' was
+   replaced with a new implementation in `magit2.el'.
 
  * The package `cl-lib` is now used instead of the obsolete `cl'.
 
- * The library `magit.el' no longer lacks any recognizable structure.
+ * The library `magit2.el' no longer lacks any recognizable structure.
 
- * The macro `magit-define-command' was removed.
+ * The macro `magit2-define-command' was removed.
    The hook that was defined in addition to the command only served
    to make things more complicated and the generated doc-string was
    insufficient.
 
  * The use of "section actions" has been reduced to a minimum.
    Commands that behave differently depending on the type of the
-   current section still use `magit-section-case' or in some cases
-   even `magit-section-action', but the preferred way for users to
+   current section still use `magit2-section-case' or in some cases
+   even `magit2-section-action', but the preferred way for users to
    add new variants now is to add a new command to the type-specific
    section keymap, instead of the hooks defined by
-   `magit-section-action'.
+   `magit2-section-action'.
 
- * More work is done directly in `magit-with-section'.
+ * More work is done directly in `magit2-with-section'.
    Most of the helper functions were removed.  These functions
    were not intended to be used directly, but that did not keep
    contributors from doing so, leading to many inconsistencies.
 
  * The mode machinery was massively refactored.
-   Most importantly the new macro `magit-mode-setup' was added,
-   replacing the old `magit-mode-init' which forgoes most of the
+   Most importantly the new macro `magit2-mode-setup' was added,
+   replacing the old `magit2-mode-init' which forgoes most of the
    things each and every of its callers has to do, which let to many
    inconsistencies
 
  * The refresh machinery was massively refactored.
    A refresh now has to be requested more explicitly by either calling
-   `magit-refresh' or one of the functions that call Git and then the
+   `magit2-refresh' or one of the functions that call Git and then the
    former.  Also, refreshing now more often correctly preserves point.
 
  * Washing diffs now takes less cycles.
@@ -140,7 +140,7 @@ Changes since v1.2.2
  * Tools used to test whether Git supports certain features was removed.
    Instead we now require a non-ancient version of Git.
 
- * The shell script `magit' reincarnated as a separate repository.
+ * The shell script `magit2' reincarnated as a separate repository.
 
 Authors
 -------

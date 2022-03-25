@@ -6,11 +6,11 @@ Released 7 May 2010 by Phil Jackson.
 Changes since v0.7.0
 --------------------
 
- * By setting magit-repo-dirs, you can get better repo completion.
-   Magit will offer all subdirectories (up to magit-repo-dirs level
-   deep) of the listed directories when magit-status asks for a
+ * By setting magit2-repo-dirs, you can get better repo completion.
+   Magit will offer all subdirectories (up to magit2-repo-dirs level
+   deep) of the listed directories when magit2-status asks for a
    directory to work on.  You can get the old behavior with a double
-   prefix to magit-status.
+   prefix to magit2-status.
 
  * Hitting 'c' or 'C' while resolving a conflict in the middle of a
    rebase will offer to continue the rebase instead of trying to commit

@@ -16,7 +16,7 @@ Fixes since v2.10.1
   and because of a too-strict assertion that only single-parent commits
   can be cherry-picked.  #2978
 
-* `magit-abbrev-length' mishandled two edge cases, returning 0 when
+* `magit2-abbrev-length' mishandled two edge cases, returning 0 when
   called within an empty repository or outside of a repository.
   077740f5
 
@@ -29,9 +29,9 @@ Fixes since v2.10.1
   working tree.  293f0cc8
 
 * In diff buffers created using the dotted range notation, the command
-  `magit-diff-visit-file' incorrectly swapped which revision was
+  `magit2-diff-visit-file' incorrectly swapped which revision was
   visited for deleted and added lines.  For example, with the range
-  "rev1..rev2", calling `magit-diff-visit-file' on a deleted line
+  "rev1..rev2", calling `magit2-diff-visit-file' on a deleted line
   visited the blob for rev2.  c24f32cd
 
 This release also contains other minor improvements, bug fixes, and

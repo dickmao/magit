@@ -6,7 +6,7 @@ a new discussion, click [here][new] and then click on <kbd>Select
 Category</kbd>, most likely to select the **Q&A** category.
 
 Alternatively you can ask for help on the Emacs [StackExchange][se]
-site (using the `magit` tag) or on the Emacs [subreddit].
+site (using the `magit2` tag) or on the Emacs [subreddit].
 
 Reporting issues and suggesting features
 ========================================
@@ -31,9 +31,9 @@ In the case of Magit this is somewhat complicated by the fact that
 we use some custom extensions.  Some meta documentation can be found
 [here][metadocs].
 
-TL;DR — Edit `magit.org`.  Do not edit `magit.texi`.  And don't touch
-the version numbers.  The maintainers will then update `magit.texi`
-and the version numbers in `magit.org` and amend those changes to your
+TL;DR — Edit `magit2.org`.  Do not edit `magit2.texi`.  And don't touch
+the version numbers.  The maintainers will then update `magit2.texi`
+and the version numbers in `magit2.org` and amend those changes to your
 commit.
 
 Donations
@@ -43,11 +43,11 @@ Please also consider to contribute by making a
 [monetary donation][donations].
 
 
-[discussions]: https://github.com/magit/magit/discussions
-[donations]:   https://magit.vc/donate/
-[issues]:      https://github.com/magit/magit/issues
-[metadocs]:    https://github.com/magit/magit/wiki/Documentation-tools-and-conventions
-[new]:         https://github.com/magit/magit/discussions/new
-[pulls]:       https://github.com/magit/magit/pulls
+[discussions]: https://github.com/magit2/magit2/discussions
+[donations]:   https://magit2.vc/donate/
+[issues]:      https://github.com/magit2/magit2/issues
+[metadocs]:    https://github.com/magit2/magit2/wiki/Documentation-tools-and-conventions
+[new]:         https://github.com/magit2/magit2/discussions/new
+[pulls]:       https://github.com/magit2/magit2/pulls
 [se]:          https://emacs.stackexchange.com
 [subreddit]:   https://www.reddit.com/r/emacs

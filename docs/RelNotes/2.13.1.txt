@@ -4,13 +4,13 @@ Magit v2.13.1 Release Notes
 Fixes since v2.13.0
 -------------------
 
-* The prompt used by `magit-rebase-interactive-assert' was wrong.
+* The prompt used by `magit2-rebase-interactive-assert' was wrong.
   37d76f409
 
-* `magit-rebase-autosquash' asked for confirmation when the user
+* `magit2-rebase-autosquash' asked for confirmation when the user
   already confirmed earlier.  02e6c75b6
 
-* `magit-log-wash-rev` errored in ~magit-cherry-mode~, starting with
+* `magit2-log-wash-rev` errored in ~magit2-cherry-mode~, starting with
   Emacs 26.1.  1ee577b35
 
 * Magit used a completion function to make the built-in completion
@@ -23,7 +23,7 @@ Fixes since v2.13.0
 * When using cygwin, then `git-commit-setup-font-lock' could end up
   trying to run git in a non-existent directory.  #3505
 
-* `magit-insert-modules-unpushed-to-pushremote' failed to insert
+* `magit2-insert-modules-unpushed-to-pushremote' failed to insert
   anything due to a typo in the used commit range.  d4e159f35
 
 Authors

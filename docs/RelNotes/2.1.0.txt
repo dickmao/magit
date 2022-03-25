@@ -30,7 +30,7 @@ this will only be possible if, unlike during the last two and a half
 years, I am being paid for my work.
 
 I intend to run a fund-raising campaign, but you can already donate
-now (see http://magit.vc/donations.html).  I am also looking for
+now (see http://magit2.vc/donations.html).  I am also looking for
 corporate sponsorship and/or employment.  One area where Magit
 actually lags behind other Git clients is integration with Git hosting
 platforms and code review tools.  I hope that these platforms have an
@@ -50,7 +50,7 @@ Changes since v1.4.0
    options, it also explains concepts and plumbing functions, and
    comes with extensive indices for commands, functions, and options.
 
-   Actually three new manuals were added; the packages `magit-popup'
+   Actually three new manuals were added; the packages `magit2-popup'
    and `with-editor' are documented in separate manuals.
 
    The manuals are written in Org mode and then exported to Texinfo.
@@ -82,13 +82,13 @@ Changes since v1.4.0
    Most importantly, the names of commands and options now begin with
    a prefix that includes the name of the respective git sub-command.
    For example, the names of all commands and options related to
-   diffing now begin with `magit-diff-'.
+   diffing now begin with `magit2-diff-'.
 
    Many plumbing functions and variables were also renamed.  In some
-   cases, that also lead to shared prefixes, such as `magit-process-',
-   `magit-mode-', `magit-git-', and `magit-insert-'.  But many
+   cases, that also lead to shared prefixes, such as `magit2-process-',
+   `magit2-mode-', `magit2-git-', and `magit2-insert-'.  But many
    plumbing functions and variables continue to use names whose only
-   common part is the `magit-' prefix.
+   common part is the `magit2-' prefix.
 
    Future renames will be performed at well defined times and obsolete
    function/variable definitions will be provided for backward
@@ -103,10 +103,10 @@ Changes since v1.4.0
    The library `git-commit.el' can be used without Magit, so it is
    distributed as a separate Elpa package.  However, `git-rebase.el'
    now depends on several Magit libraries and is therefore distributed
-   as part of the `magit' package.
+   as part of the `magit2' package.
 
- * The library `magit-key-mode.el' was removed and replaced with
-   `magit-popup.el'.  The new implementation is much more flexible and
+ * The library `magit2-key-mode.el' was removed and replaced with
+   `magit2-popup.el'.  The new implementation is much more flexible and
    easier to use than the old one.  Major new features include setting
    default arguments directly inside the popup and macros for defining
    new popups and extending existing popups.
@@ -128,12 +128,12 @@ Changes since v1.4.0
 
  * All libraries are now located in the new `lisp/' subdirectory.
 
- * The library `magit.el' has been split into many new libraries.
+ * The library `magit2.el' has been split into many new libraries.
    The code base is now much better organized.  Together with the
    description of plumbing commands in the manual, this should make it
    much easier for contributors to get started.
 
- * The library `magit-wip.el' has been rewritten from scratch and no
+ * The library `magit2-wip.el' has been rewritten from scratch and no
    longer depends on the external and unmaintained shell script from
    https://github.com/bartman/git-wip.
 
@@ -145,13 +145,13 @@ Changes since v1.4.0
    extended to uncommitted changes (which some exceptions).  These
    modes are not enabled by default due to performance concerns.
 
- * The library `magit-blame.el' has been rewritten from scratch.  The
+ * The library `magit2-blame.el' has been rewritten from scratch.  The
    new implementation can blame recursively, jump to the next/previous
    chunk from the same commit, replace headings with separator lines,
    scroll the revision buffer for the chunk at point (like log buffers),
    and fine-tune the arguments for `git blame' using a popup.
 
- * The new library `magit-ediff.el' replaces the old Ediff support.
+ * The new library `magit2-ediff.el' replaces the old Ediff support.
    The new implementation comes with a dwim command and a popup, and
    it relies less on high-level functions provided by VC and Ediff
    itself, because many of those turned out to be unsuitable.
@@ -166,11 +166,11 @@ Changes since v1.4.0
    built-in library `ido.el', is not a sufficient drop-in replacement
    for `completing-read'.
 
- * The new macro `magit-insert-section' replaces `magit-with-section'.
-   The macros `magit-cmd-insert-section' and `magit-git-insert-section'
+ * The new macro `magit2-insert-section' replaces `magit2-with-section'.
+   The macros `magit2-cmd-insert-section' and `magit2-git-insert-section'
    were removed without a direct replacement.
 
- * The new functions `magit-insert' and `magit-put-face-property' take
+ * The new functions `magit2-insert' and `magit2-put-face-property' take
    care of working around the fact that negative overlay priorities
    are not supported, i.e., that overlays always take precedence
    against text properties.  Previously this was done in various
@@ -178,14 +178,14 @@ Changes since v1.4.0
    not evaporate).
 
  * The section visibility and movement commands were rewritten from
-   scratch.  All those commands now share the prefix `magit-section-'
+   scratch.  All those commands now share the prefix `magit2-section-'
    and edge cases are handled better.  New commands were added that
    allow cycling the visibility of sections and their children.  From
    a user perspective Magit's section handling is now quite similar to
    that of Org mode.
 
- * The macro `magit-section-action' was removed.  The related macro
-   `magit-section-case' still exists and will continue to do so.  The
+ * The macro `magit2-section-action' was removed.  The related macro
+   `magit2-section-case' still exists and will continue to do so.  The
    action variant provided user-customizable hooks, but these hooks
    were rarely, if ever, used.  Instead of such action hooks, users who
    wish to extend Magit now have to use type-specific section keymaps.
@@ -203,7 +203,7 @@ Changes since v1.4.0
    type.  When a region does not satisfy one of these, then it is
    displayed the sames as in other buffers and Magit cannot act on it.
 
- * The new option `magit-no-confirm' makes it easy to forgo having to
+ * The new option `magit2-no-confirm' makes it easy to forgo having to
    confirm potentially dangerous actions.  Many of these actions are
    only dangerous for users who don't know how to undo them.  When the
    wip modes are turned on, many more previously fatal actions can be
@@ -225,24 +225,24 @@ Changes since v1.4.0
    was intended for internal use only and indeed, changes made there
    broke Magit in the past.
 
- * The new option `magit-revert-buffers' controls whether and how
+ * The new option `magit2-revert-buffers' controls whether and how
    buffers visiting tracked files are reverted.  As before, such
    buffers are reverted by default.  But by default this is now done
    rather noisily to encourage users to read the doc-string and
    pick what is right for them.  It's now also possible to revert
    asynchronously and for the user to be asked every time there are
    buffers that could be reverted.  This option replaces
-   `magit-auto-revert-mode`.
+   `magit2-auto-revert-mode`.
 
  * Many new section inserters are available.  Some are variations of
-   default inserters; `magit-insert-unpulled-cherries', for example, is
-   like `magit-insert-unpulled-commits' but prefixes each commit with
+   default inserters; `magit2-insert-unpulled-cherries', for example, is
+   like `magit2-insert-unpulled-commits' but prefixes each commit with
    "+" or "-" to indicate its "cherry state". Other inserters are
-   completely new (e.g., `magit-insert-unpulled-module-commits').
+   completely new (e.g., `magit2-insert-unpulled-module-commits').
 
  * The header sections in status buffers can now be customized using
-   the new `magit-status-headers-hook'.  This is an additional section
-   insertion hook; separating it from `magit-status-sections-hook'
+   the new `magit2-status-headers-hook'.  This is an additional section
+   insertion hook; separating it from `magit2-status-sections-hook'
    gives users complete control over what information is displayed in
    the headers, while still making the first header the parent section
    of all the other header lines.
@@ -305,7 +305,7 @@ Changes since v1.4.0
    continuing or aborting the sequence, and the status buffer lists
    the relevant commits.
 
- * The magit-specific "rewriting" feature has been removed because it
+ * The magit2-specific "rewriting" feature has been removed because it
    was a hybrid of "rebasing" and "cherry-picking" and vastly
    inferior to both of them.
 
@@ -352,7 +352,7 @@ Changes since v1.4.0
    for branching, listing, and showing stashes were added to the
    stashing prefix
 
- * When creating stashes the new implementation in `magit-wip.el' is
+ * When creating stashes the new implementation in `magit2-wip.el' is
    used instead of `git stash'.  This allows the user to create
    snapshot stashes without touching any files in the working tree.
 

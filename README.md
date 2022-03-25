@@ -1,13 +1,13 @@
-<div align="center"><img src="https://magit.vc/assets/magit-168x200px.png"/></div>
+<div align="center"><img src="https://magit2.vc/assets/magit2-168x200px.png"/></div>
 <h2 align="center">A Git Porcelain inside Emacs</h2>
 <p align="center">
-  <a href="https://magit.vc"><b>homepage</b></a> |
-  <a href="https://magit.vc/manual"><b>manual</b></a> |
-  <a href="https://magit.vc/manual/magit/FAQ.html"><b>faq</b></a> |
-  <a href="https://github.com/magit/magit/wiki"><b>wiki</b></a> |
-  <a href="https://groups.google.com/forum/?fromgroups#!forum/magit"><b>mailing list</b></a> |
-  <a href="https://emacs.stackexchange.com/questions/tagged/magit"><b>forum</b></a> |
-  <a href="https://twitter.com/magit_emacs"><b>news</b></a>
+  <a href="https://magit2.vc"><b>homepage</b></a> |
+  <a href="https://magit2.vc/manual"><b>manual</b></a> |
+  <a href="https://magit2.vc/manual/magit2/FAQ.html"><b>faq</b></a> |
+  <a href="https://github.com/magit2/magit2/wiki"><b>wiki</b></a> |
+  <a href="https://groups.google.com/forum/?fromgroups#!forum/magit2"><b>mailing list</b></a> |
+  <a href="https://emacs.stackexchange.com/questions/tagged/magit2"><b>forum</b></a> |
+  <a href="https://twitter.com/magit2_emacs"><b>news</b></a>
 </p>
 <hr>
 
@@ -25,8 +25,8 @@
 <hr>
 
 <div align="center">
-  Keeping its users <a href= "https://magit.vc/quotes">this excited</a> is
-  <a href="https://magit.vc/stats/authors.html#cumulated_added_lines_of_code_per_author">
+  Keeping its users <a href= "https://magit2.vc/quotes">this excited</a> is
+  <a href="https://magit2.vc/stats/authors.html#cumulated_added_lines_of_code_per_author">
     a lot of work
   </a>.
   If Magit makes you <br> more productive too,
@@ -40,26 +40,26 @@
   <a href="https://github.com/sponsors/tarsius">
     <img title="Donate using Github Sponsors"
          alt="Donate using Github Sponsors"
-         src="https://magit.vc/assets/github-sponsors-50px.png"></a>
+         src="https://magit2.vc/assets/github-sponsors-50px.png"></a>
   &nbsp;&nbsp;
-  <a href="https://magit.vc/donate/#iban">
+  <a href="https://magit2.vc/donate/#iban">
      <img title="Donate using IBAN"
           alt="Donate using IBAN"
-          src="https://magit.vc/assets/iban-50px.png"></a>
+          src="https://magit2.vc/assets/iban-50px.png"></a>
   &nbsp;&nbsp;
-  <a href="https://magit.vc/donate/#zelle">
+  <a href="https://magit2.vc/donate/#zelle">
      <img title="Donate using Zelle (USA bank transfer)"
           alt="Donate using Zelle (USA bank transfer)"
-          src="https://magit.vc/assets/zelle-50px.png"></a>
+          src="https://magit2.vc/assets/zelle-50px.png"></a>
   &nbsp;&nbsp;
   <a href="https://www.paypal.me/JonasBernoulli/20">
     <img title="Donate using PayPal"
          alt="Donate using PayPal"
-         src="https://magit.vc/assets/paypal.png"></a>
+         src="https://magit2.vc/assets/paypal.png"></a>
 </div>
 <br>
 <div align="center">
-  Some alternative donation methods are <a href="https://magit.vc/donate">available</a>.
+  Some alternative donation methods are <a href="https://magit2.vc/donate">available</a>.
 </div>
 <hr>
 
@@ -70,7 +70,7 @@ If you are new to Magit, then either one of the following two
 articles should help understanding how it differs from other Git
 clients.
 
-- [Visual Magit walk-through](https://emacsair.me/2017/09/01/magit-walk-through)
+- [Visual Magit walk-through](https://emacsair.me/2017/09/01/magit2-walk-through)
 
   If you are completely new to Magit, then this article is a good
   visual introduction.
@@ -131,26 +131,26 @@ Thanks to all of you, may (the history of) the source be with you!
 ***
 [![Paren Xkcb](https://img.shields.io/badge/%28-%20%20%20-red.svg)](https://xkcd.com/859)
 [![GPL v3](https://img.shields.io/badge/license-GPL_v3-green.svg)](http://www.gnu.org/licenses/gpl-3.0.txt)
-[![Build Status](https://github.com/magit/magit/workflows/test/badge.svg?branch=master)](https://github.com/magit/magit/actions)
-[![NonGNU ELPA](https://elpa.nongnu.org/nongnu/magit.svg)](https://elpa.nongnu.org/nongnu/magit.html)
-[![Melpa](https://melpa.org/packages/magit-badge.svg)](https://melpa.org/#/magit)
-[![Melpa Stable](https://stable.melpa.org/packages/magit-badge.svg)](https://stable.melpa.org/#/magit)
-[![Eierlegende Wollmilchsau](https://img.shields.io/badge/eierlegende-Wollmilchsau-green.svg)](https://magit.vc/manual/magit)
-[![Swiss Made](https://img.shields.io/badge/swiss-made-red.svg?colorA=E11A27&colorB=555555)](https://magit.vc/stats/authors.html#commits_per_author)
-[![Netscape](https://magit.vc/assets/netscape-20px.png)](https://en.wikipedia.org/wiki/Browser_wars)
+[![Build Status](https://github.com/magit2/magit2/workflows/test/badge.svg?branch=master)](https://github.com/magit2/magit2/actions)
+[![NonGNU ELPA](https://elpa.nongnu.org/nongnu/magit2.svg)](https://elpa.nongnu.org/nongnu/magit2.html)
+[![Melpa](https://melpa.org/packages/magit2-badge.svg)](https://melpa.org/#/magit2)
+[![Melpa Stable](https://stable.melpa.org/packages/magit2-badge.svg)](https://stable.melpa.org/#/magit2)
+[![Eierlegende Wollmilchsau](https://img.shields.io/badge/eierlegende-Wollmilchsau-green.svg)](https://magit2.vc/manual/magit2)
+[![Swiss Made](https://img.shields.io/badge/swiss-made-red.svg?colorA=E11A27&colorB=555555)](https://magit2.vc/stats/authors.html#commits_per_author)
+[![Netscape](https://magit2.vc/assets/netscape-20px.png)](https://en.wikipedia.org/wiki/Browser_wars)
 
 
-[backers]: https://github.com/magit/magit/blob/master/Documentation/BACKERS.md
-[contrib]: https://github.com/magit/magit/blob/master/.github/CONTRIBUTING.md
-[issues]:  https://github.com/magit/magit/issues
-[pulls]:   https://github.com/magit/magit/pulls
+[backers]: https://github.com/magit2/magit2/blob/master/Documentation/BACKERS.md
+[contrib]: https://github.com/magit2/magit2/blob/master/.github/CONTRIBUTING.md
+[issues]:  https://github.com/magit2/magit2/issues
+[pulls]:   https://github.com/magit2/magit2/pulls
 
-[authors]: https://magit.vc/stats/authors.html
-[faq]:     https://magit.vc/manual/magit/FAQ.html
-[manual]:  https://magit.vc/manual
+[authors]: https://magit2.vc/stats/authors.html
+[faq]:     https://magit2.vc/manual/magit2/FAQ.html
+[manual]:  https://magit2.vc/manual
 
-[forum]:   https://emacs.stackexchange.com/questions/tagged/magit
-[list]:    https://groups.google.com/forum/?fromgroups#!forum/magit
+[forum]:   https://emacs.stackexchange.com/questions/tagged/magit2
+[list]:    https://groups.google.com/forum/?fromgroups#!forum/magit2
 
 [jonas]:   https://emacsair.me
 [kyle]:    https://github.com/kyleam

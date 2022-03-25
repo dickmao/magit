@@ -6,60 +6,60 @@ Released 19 May 2016 by Jonas Bernoulli.
 We are pleased to announce the release of Magit version 2.7.0,
 representing 116 commits by 7 people over 7 weeks.
 
-Also see http://emacsair.me/2016/05/19/magit-2.7.
+Also see http://emacsair.me/2016/05/19/magit2-2.7.
 
 Changes since v2.6.0
 --------------------
 
-* Added new popup `magit-subtree-popup' and bound "O" to it.
+* Added new popup `magit2-subtree-popup' and bound "O" to it.
 
-* Added new popup `magit-branch-config-popup' and made it available
-  from the popups `magit-branch-popup', `magit-pull-and-fetch-popup',
-  `magit-pull-popup', `magit-fetch-popup', and `magit-push-popup'.
+* Added new popup `magit2-branch-config-popup' and made it available
+  from the popups `magit2-branch-popup', `magit2-pull-and-fetch-popup',
+  `magit2-pull-popup', `magit2-fetch-popup', and `magit2-push-popup'.
 
   With a prefix argument it reads a branch to be configured in the
   minibuffer instead of using the current branch.
 
-* Added new option `magit-branch-popup-show-variables', defaulting to
+* Added new option `magit2-branch-popup-show-variables', defaulting to
   t to avoid changing key bindings.  When set to nil, no variables are
-  displayed directly in the `magit-branch-popup', instead the subpopup
-  `magit-branch-config-popup' has to be used.
+  displayed directly in the `magit2-branch-popup', instead the subpopup
+  `magit2-branch-config-popup' has to be used.
 
-* Added new popup command `magit-log-buffer-file-popup'.
+* Added new popup command `magit2-log-buffer-file-popup'.
 
-* Added new command `magit-diff-buffer-file' and new option
-  `magit-diff-buffer-file-locked'.  When the value of the option is
+* Added new command `magit2-diff-buffer-file' and new option
+  `magit2-diff-buffer-file-locked'.  When the value of the option is
   non-nil, the default, then the command uses a dedicated buffer.
 
-* Added new option `magit-log-buffer-file-locked'.  When its value is
-  non-nil, the default, then `magit-log-buffer-file' uses a dedicated
+* Added new option `magit2-log-buffer-file-locked'.  When its value is
+  non-nil, the default, then `magit2-log-buffer-file' uses a dedicated
   buffer.
 
-* Added new commands `magit-worktree-checkout',
-  `magit-worktree-branch', `magit-worktree-delete',
-  and `magit-worktree-status'.
+* Added new commands `magit2-worktree-checkout',
+  `magit2-worktree-branch', `magit2-worktree-delete',
+  and `magit2-worktree-status'.
 
-* Added new section inserter `magit-insert-worktrees'
+* Added new section inserter `magit2-insert-worktrees'
 
-* The command `magit-clone' now runs asynchronously, which avoids
+* The command `magit2-clone' now runs asynchronously, which avoids
   blocking Emacs and allows handling password prompts.
 
-* The command `magit-stage' learned to stage an untracked file while
+* The command `magit2-stage' learned to stage an untracked file while
   leaving its content unstaged (i.e. `git add --intent-to-add') when
   called with a prefix argument.
 
-* The command `magit-reverse' learned to use `--reject' to ensure that
+* The command `magit2-reverse' learned to use `--reject' to ensure that
   non-conflicting hunks are applied and that conflicting hunks are put
   into reject files.
 
-* When the command `magit-discard' is used on staged changes, then
+* When the command `magit2-discard' is used on staged changes, then
   that is done by first reversing the changes in the index and then in
   the working tree.  The second step could fail due to conflicts.  Now
   the `--reject' argument is used, which ensures that non-conflicting
   hunks are applied and that conflicting hunks are put into reject
   files.
 
-* The command `magit-rebase-continue' learned to reuse the old commit
+* The command `magit2-rebase-continue' learned to reuse the old commit
   message as-is when called with a prefix argument.
 
 * In the refs buffer symbolic refs, such as "remotes/origin/HEAD", are

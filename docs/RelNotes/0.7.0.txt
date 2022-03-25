@@ -20,7 +20,7 @@ Changes since v0.6.1
    'L' shows a more verbose log.  Use the prefix arg to specify the
    range of the log.
 
- * M-x magit-status doesn't prompt anymore for a directory when invoked
+ * M-x magit2-status doesn't prompt anymore for a directory when invoked
    from within a Git repository.  Use C-u to force a prompt.
 
  * When you have nothing staged, 'c' will now explicitly ask whether to
@@ -44,7 +44,7 @@ Changes since v0.6.1
 
  * Magit now also works when the directory is accessed via tramp.
 
- * M-x magit-status can also create new repositories when given a
+ * M-x magit2-status can also create new repositories when given a
    directory that is not a Git repository.
 
  * Magit works better with oldish Gits that don't understand "--graph",

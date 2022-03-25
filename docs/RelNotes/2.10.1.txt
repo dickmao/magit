@@ -4,13 +4,13 @@ Magit v2.10.1 Release Notes
 Changes since v2.10.0
 ---------------------
 
-* The command `ido-enter-magit-status' is now being autoloaded.  #2918
+* The command `ido-enter-magit2-status' is now being autoloaded.  #2918
 
 * The minor-mode `bug-reference-mode' is now being suggested when
-  customizing `magit-revision-mode-hook' and `git-commit-setup-hook'.
+  customizing `magit2-revision-mode-hook' and `git-commit-setup-hook'.
   e0d57c49
 
-* The function `magit-version' can now deal with the Magit libraries
+* The function `magit2-version' can now deal with the Magit libraries
   being symlinked to, which is required for the new `straight' package
   manager.  #2967
 
@@ -21,11 +21,11 @@ Fixes since v2.10.0
   when asked to confirm the deletion of these stashes resulted in a
   type error.  #2917
 
-* The function `magit-split-range' choked on ranges if one of the
+* The function `magit2-split-range' choked on ranges if one of the
   revisions was omitted, breaking a diff variant and potentially
   other uses as well.  #2928
 
-* The function `magit-commit-setup' called without an argument, which
+* The function `magit2-commit-setup' called without an argument, which
   causes the option `enable-local-variables' to be ignored.  #2946
 
 * When committing inside a repository that was created using `git
@@ -37,11 +37,11 @@ Fixes since v2.10.0
 * In the repository list buffer, the columns that are supposed to list
   unpushed and unpulled commit counts, were blank.  #2960
 
-* The command `magit-reflog-head' did not properly format reflog lines
+* The command `magit2-reflog-head' did not properly format reflog lines
   for branch renaming events.  2a268e20
 
-* The commands `magit-diff-show-or-scroll-down' and
-  `magit-diff-or-scroll-up' scrolled instead of updated the revision
+* The commands `magit2-diff-show-or-scroll-down' and
+  `magit2-diff-or-scroll-up' scrolled instead of updated the revision
   or stash buffer, when that already showed the requested reference
   but that reference no longer pointed at the same revision.  #2966
 

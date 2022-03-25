@@ -6,39 +6,39 @@ Released 23 March 2011 by Phil Jackson.
 Changes since v0.8.2
 --------------------
 
- * New library `magit-key-mode.el'.  From a popup buffer dispatch
+ * New library `magit2-key-mode.el'.  From a popup buffer dispatch
    Magit/Emacs commands which wrap Git commands and select the
    arguments passed to Git.  Group various sets of related commands
    in new menus and adjust them accordingly.
 
- * New library `magit-svn.el' based on code previously in `magit.el'.
+ * New library `magit2-svn.el' based on code previously in `magit2.el'.
    Improve the implementation.  Control `git svn' from Magit.
 
- * New library `magit-topgit.el' based on code previously in
-   `magit.el'.  Improve the implementation.  Control TopGit from Magit.
+ * New library `magit2-topgit.el' based on code previously in
+   `magit2.el'.  Improve the implementation.  Control TopGit from Magit.
 
  * Provide a wrapper for `completing-read'.  Support using iswitchb to
    do completion.
 
  * Fixed and improved information shown during a rebase.
 
- * New macro `magit-define-inserter' to define functions which insert
+ * New macro `magit2-define-inserter' to define functions which insert
    sections.
 
- * New macro `magit-add-action'.  A hook-like extension mechanism for
+ * New macro `magit2-add-action'.  A hook-like extension mechanism for
    commands that behave differently based on the type of the section
    at point.
 
- * New macro `magit-define-command'.  Like `defun' but also define
+ * New macro `magit2-define-command'.  Like `defun' but also define
    a hook in addition to the function/command.  If a hook function
    succeeds do not run the function body as passed to this macro.
 
- * New commands `magit-add-change-log-entry'
-   and `magit-add-change-log-entry-other-window'.
+ * New commands `magit2-add-change-log-entry'
+   and `magit2-add-change-log-entry-other-window'.
 
- * New command `magit-change-what-branch-tracks'.
+ * New command `magit2-change-what-branch-tracks'.
 
- * New commands `magit-run-git-gui' and `magit-run-gitk'.
+ * New commands `magit2-run-git-gui' and `magit2-run-gitk'.
 
  * Various new submodule commands.
 

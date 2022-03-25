@@ -5,7 +5,7 @@ include default.mk
 
 .PHONY: lisp docs \
 	install install-lisp install-docs install-info \
-	test test-interactive magit \
+	test test-interactive magit2 \
 	clean clean-lisp clean-docs clean-archives \
 	stats \
 	dist versionlib $(PKG)-$(VERSION).tar.gz
@@ -113,7 +113,7 @@ clean: clean-lisp clean-docs clean-archives
 	@printf "Cleaning...\n"
 	@$(RM) *.elc $(ELGS) # temporary cleanup kludge
 	@$(RM) docs/*.texi~ docs/*.info-1 docs/*.info-2
-	@$(RM) magit-pkg.el t/magit-tests.elc
+	@$(RM) magit2-pkg.el t/magit2-tests.elc
 
 clean-lisp:
 	@$(MAKE) -C lisp clean
@@ -122,7 +122,7 @@ clean-docs:
 	@$(MAKE) -C docs clean
 
 clean-archives:
-	@$(RM) *.tar.gz *.tar lisp/magit-version.el
+	@$(RM) *.tar.gz *.tar lisp/magit2-version.el
 	@$(RMDIR) $(PKG)-$(VERSION)
 
 clean-all: clean clean-stats

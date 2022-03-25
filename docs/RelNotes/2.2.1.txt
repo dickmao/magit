@@ -22,17 +22,17 @@ This is a bugfix release.
 * Blaming passed the wrong line range when the file's buffer was
   narrowed.
 
-* `magit-shell-command-topdir' used `magit-git-command' instead of
-  `magit-shell-command'.
+* `magit2-shell-command-topdir' used `magit2-git-command' instead of
+  `magit2-shell-command'.
 
-* `magit-copy-as-kill' added "nil" to the `kill-ring' when there was
+* `magit2-copy-as-kill' added "nil" to the `kill-ring' when there was
   nothing useful to put there.
 
-* `magit-find-file-hook', `magit-find-index-hook',
-  `magit-refresh-popup-buffer-hook' were used without being defined
+* `magit2-find-file-hook', `magit2-find-index-hook',
+  `magit2-refresh-popup-buffer-hook' were used without being defined
   using `defvar'.
 
-* `magit-format-ref-labels' failed to work around a Git bug, resulting
+* `magit2-format-ref-labels' failed to work around a Git bug, resulting
   in refnames not being colorized when `--simplify-by-decoration' is
   used.
 

@@ -2,10 +2,10 @@ Authors
 =======
 
 The following people have contributed to Magit, including the
-libraries `git-commit.el`, `magit-popup.el`, and `with-editor.el`
+libraries `git-commit.el`, `magit2-popup.el`, and `with-editor.el`
 which are distributed as separate Elpa packages.
 
-For statistics see https://magit.vc/stats/authors.html.
+For statistics see https://magit2.vc/stats/authors.html.
 
 Names below are sorted alphabetically.
 

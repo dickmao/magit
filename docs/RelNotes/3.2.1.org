@@ -11,7 +11,7 @@ of advanced features that previously seemed too daunting to use on a
 daily basis.  Many users will find that by using Magit they can become
 more effective Git user.
 
-For more information about Magit, see https://magit.vc.
+For more information about Magit, see https://magit2.vc.
 
 * Magit v3.2.1 Release Notes
 
@@ -24,4 +24,4 @@ identical to version 3.2.0 except for dependency metadata, which had
 to be changed so that this package could be released on NonGNU Elpa.
 
 Also see https://emacsair.me/2021/08/06/nongnu-elpa
-and https://elpa.nongnu.org/nongnu/magit.html.
+and https://elpa.nongnu.org/nongnu/magit2.html.

@@ -6,7 +6,7 @@ Released 30 January 2016 by Jonas Bernoulli.
 We are pleased to announce the release of Magit version 2.5.0,
 representing 78 commits by 4 contributors over 2 weeks.
 
-Also see http://emacsair.me/2016/02/10/magit-2.5.
+Also see http://emacsair.me/2016/02/10/magit2-2.5.
 
 Changes since v2.4.0
 --------------------
@@ -14,69 +14,69 @@ Changes since v2.4.0
 * The library `with-editor.el' reincarnated as a separate repository.
 
   It was already available as a separate package, and since it can be
-  of use for packages that have absolutely nothing to do with `magit'
+  of use for packages that have absolutely nothing to do with `magit2'
   it makes sense to maintain it separately.  That wasn't done before
   because that would have made it harder to change it and its users
-  within the magit repository in parallel.  I expect there will be
+  within the magit2 repository in parallel.  I expect there will be
   few such changes in the future.
 
-* Added new library `magit-submodule.el'.  It contains code that was
+* Added new library `magit2-submodule.el'.  It contains code that was
   previously spread across various libraries.
 
 * Added new option `auto-revert-buffer-list-filter' and redefined
   `auto-revert-buffers' from `autorevert.el' to use it.  Added new
-  predicates `magit-auto-revert-buffer-p' and the more restrictive
-  `magit-auto-revert-repository-buffer-p', which are both intended
+  predicates `magit2-auto-revert-buffer-p' and the more restrictive
+  `magit2-auto-revert-repository-buffer-p', which are both intended
   to be used as potential value of the option.
 
   For now the option defaults to `nil', but that might change in a
   future release.  When Magit explicitly calls `auto-revert-buffers'
   (as opposed to when that is called due to a file notification event
   or by a timer), and `auto-revert-buffer-list-filter' is `nil', then
-  it is let-bound to `magit-auto-revert-repository-buffer-p'.
+  it is let-bound to `magit2-auto-revert-repository-buffer-p'.
 
   Users who use Tramp and experience delays, should consider setting
-  the option to `magit-auto-revert-repository-buffer-p'.
+  the option to `magit2-auto-revert-repository-buffer-p'.
 
-* By default, invoking `magit-unstage' on a committed change now
+* By default, invoking `magit2-unstage' on a committed change now
   performs an action which is somewhat similar to unstaging.  The
   change is reverted in the index, but not the working tree.  This
   allows extracting changes from HEAD.
 
-  Setting the new option `magit-unstage-committed' to nil, disables
+  Setting the new option `magit2-unstage-committed' to nil, disables
   this behavior.  Attempting to unstage a committed change would then
   result in an error again.
 
 * Because file notifications may arrive with a delay, the option
-  `magit-auto-revert-immediately' now defaults to `t' even when file
+  `magit2-auto-revert-immediately' now defaults to `t' even when file
   notifications can be used,
 
-* Like `magit-refresh' already did, `magit-refresh-all' now runs the
-  hooks `magit-pre-refresh-hook' and `magit-post-refresh-hook'.
+* Like `magit2-refresh' already did, `magit2-refresh-all' now runs the
+  hooks `magit2-pre-refresh-hook' and `magit2-post-refresh-hook'.
 
 * The heading of the section which lists commits that exist in the
   current branch but not in its upstream was changed from "Unpushed
   to <upstream>" to "Unmerged into <upstream>", because one usually
   should merge into that branch instead of pushing to it.
 
-* Added new commands `magit-remote-set-head' and
-  `magit-remote-unset-head'.
+* Added new commands `magit2-remote-set-head' and
+  `magit2-remote-unset-head'.
 
-* By default `magit-clone' now deletes the symbolic-ref "origin/HEAD"
+* By default `magit2-clone' now deletes the symbolic-ref "origin/HEAD"
   right after running `git clone', which insists on creating it.
 
-  The new option `magit-clone-set-remote-head' can be set to `t' to
+  The new option `magit2-clone-set-remote-head' can be set to `t' to
   go back to keeping that symbolic-ref.  We default to removing it,
   because it does not actually get automatically updated when the
   HEAD of the remote changes, which makes it rather pointless.
 
-* Added new option `magit-prefer-remote-upstream' which controls
+* Added new option `magit2-prefer-remote-upstream' which controls
   whether commands which read the upstream or starting-point from
   the user would rather offer a local or a remote branch as default
   completion candidate.
 
-* Added the switch `--cover-letter' to `magit-patch-popup', and taught
-  `magit-format-patch' to immediately open the letter in a buffer.
+* Added the switch `--cover-letter' to `magit2-patch-popup', and taught
+  `magit2-format-patch' to immediately open the letter in a buffer.
 
 * Added new option `++order' to the various log popups.  This option
   and its value are converted to `--VALUE-order' before calling `git'.

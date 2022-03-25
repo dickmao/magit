@@ -15,7 +15,7 @@ emacs		mono	${EMACS}/html_mono/emacs.html
 emacs		node	${EMACS}/html_node/emacs/
 
 
-MAGIT = https://magit.vc/manual
+MAGIT = https://magit2.vc/manual
 
 forge		mono	${MAGIT}/forge.html
 forge		node	${MAGIT}/forge/
@@ -23,8 +23,8 @@ forge		node	${MAGIT}/forge/
 ghub		mono	${MAGIT}/ghub.html
 ghub		node	${MAGIT}/ghub/
 
-magit		mono	${MAGIT}/magit.html
-magit		node	${MAGIT}/magit/
+magit2		mono	${MAGIT}/magit2.html
+magit2		node	${MAGIT}/magit2/
 
 transient	mono	${MAGIT}/transient.html
 transient	node	${MAGIT}/transient/

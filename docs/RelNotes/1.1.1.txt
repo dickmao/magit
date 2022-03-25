@@ -6,10 +6,10 @@ Released 14 January 2012 by Yann Hodique.
 Changes since v1.1.0
 --------------------
 
- * `magit-svn-get-local-ref' learned to expand branch specs containing
+ * `magit2-svn-get-local-ref' learned to expand branch specs containing
    braces.
 
- * `magit-log-edit' learned to amend and create commits with no message.
+ * `magit2-log-edit' learned to amend and create commits with no message.
 
  * Several other fixes and improvements.
 

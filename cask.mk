@@ -3,7 +3,7 @@ EMACSLOADPATH := $(shell $(CASK) load-path)
 endef
 
 CASK_DIR := $(shell $(CASK) package-directory)
-$(CASK_DIR): $(TOP)Cask $(TOP)lisp/magit-pkg.el
+$(CASK_DIR): $(TOP)Cask $(TOP)lisp/magit2-pkg.el
 	$(CASK) install
 	touch $(CASK_DIR)
 

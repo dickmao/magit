@@ -5,9 +5,9 @@ Released 3 September 2015 by Jonas Bernoulli.
 
 This is a bugfix release.
 
-* `magit-diff-wash-diff' choked on unmerged binary files.  #2211
+* `magit2-diff-wash-diff' choked on unmerged binary files.  #2211
 
-* `magit-blame-popup' did not allow empty input when reading a value
+* `magit2-blame-popup' did not allow empty input when reading a value
   for "-C" or "-M".  #2208
 
 * The `emacsclient' executables belonging to non-current alternative
@@ -25,13 +25,13 @@ This is a bugfix release.
 * When `--stat' abbreviates the name of a file, then that name was
   stored in the section object instead of the full name.  #2199
 
-* `magit-file-relative-name' with non-nil TRACKED failed in Tramp
+* `magit2-file-relative-name' with non-nil TRACKED failed in Tramp
   repositories.  #2206
 
-* After failing to clone, `magit-clone' also tried to show the status
+* After failing to clone, `magit2-clone' also tried to show the status
   of the non-existent clone.  #2203
 
-* `magit-wip-log' did not display a log if the working tree or index
+* `magit2-wip-log' did not display a log if the working tree or index
   ref did not exist.
 
 This release also contains various documentation fixes and code

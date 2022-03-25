@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010-2022  The Magit Project Contributors
 ;;
 ;; You should have received a copy of the AUTHORS.md file which
-;; lists all contributors.  If not, see http://magit.vc/authors.
+;; lists all contributors.  If not, see http://magit2.vc/authors.
 
 ;; Author: Phil Jackson <phil@shellarchive.co.uk>
 ;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
@@ -74,7 +74,7 @@
 
 ;;; Code:
 
-(require 'magit)
+(require 'magit2)
 
 (require 'easymenu)
 (require 'server)
@@ -87,7 +87,7 @@
 
 (defgroup git-rebase nil
   "Edit Git rebase sequences."
-  :link '(info-link "(magit)Editing Rebase Sequences")
+  :link '(info-link "(magit2)Editing Rebase Sequences")
   :group 'tools)
 
 (defcustom git-rebase-auto-advance t
@@ -112,11 +112,11 @@
   :group 'faces
   :group 'git-rebase)
 
-(defface git-rebase-hash '((t :inherit magit-hash))
+(defface git-rebase-hash '((t :inherit magit2-hash))
   "Face for commit hashes."
   :group 'git-rebase-faces)
 
-(defface git-rebase-label '((t :inherit magit-refname))
+(defface git-rebase-label '((t :inherit magit2-refname))
   "Face for labels in label, merge, and reset lines."
   :group 'git-rebase-faces)
 
@@ -346,7 +346,7 @@ type."
            (cond
             ((and action (eq action-type 'commit))
              (let ((inhibit-read-only t))
-               (magit-delete-line)
+               (magit2-delete-line)
                (insert (concat action " " target " " trailer "\n"))))
             ((and action-type (not (or action comment-p)))
              (let ((inhibit-read-only t))
@@ -444,17 +444,17 @@ current line."
   (let ((inhibit-read-only t)
         (deactivate-mark nil)
         (bounds (git-rebase-region-bounds)))
-    (mapc #'delete-overlay magit-section-highlight-overlays)
+    (mapc #'delete-overlay magit2-section-highlight-overlays)
     (when bounds
-      (magit-section-make-overlay (car bounds) (cadr bounds)
-                                  'magit-section-heading-selection))
-    (if (and bounds (not magit-section-keep-region-overlay))
+      (magit2-section-make-overlay (car bounds) (cadr bounds)
+                                  'magit2-section-heading-selection))
+    (if (and bounds (not magit2-section-keep-region-overlay))
         (funcall (default-value 'redisplay-unhighlight-region-function) rol)
       (funcall (default-value 'redisplay-highlight-region-function)
                start end window rol))))
 
 (defun git-rebase-unhighlight-region (rol)
-  (mapc #'delete-overlay magit-section-highlight-overlays)
+  (mapc #'delete-overlay magit2-section-highlight-overlays)
   (funcall (default-value 'redisplay-unhighlight-region-function) rol))
 
 (defun git-rebase-kill-line ()
@@ -465,9 +465,9 @@ If the region is active, act on all lines touched by the region."
 
 (defun git-rebase-insert (rev)
   "Read an arbitrary commit and insert it below current line."
-  (interactive (list (magit-read-branch-or-commit "Insert revision")))
+  (interactive (list (magit2-read-branch-or-commit "Insert revision")))
   (forward-line)
-  (--if-let (magit-rev-format "%h %s" rev)
+  (--if-let (magit2-rev-format "%h %s" rev)
       (let ((inhibit-read-only t))
         (insert "pick " it ?\n))
     (user-error "Unknown revision")))
@@ -487,10 +487,10 @@ If the region is active, act on all lines touched by the region."
       (`("" nil ,_)
        (ding))
       (`(""  ,_ ,_)
-       (magit-delete-line))
+       (magit2-delete-line))
       (_
        (if initial
-           (magit-delete-line)
+           (magit2-delete-line)
          (forward-line))
        (insert (concat action " " value
                        (and (equal value initial)
@@ -524,7 +524,7 @@ remove the label on the current line, if any."
    "label"
    (lambda (initial)
      (read-from-minibuffer
-      "Label: " initial magit-minibuffer-local-ns-map))
+      "Label: " initial magit2-minibuffer-local-ns-map))
    arg))
 
 (defun git-rebase-buffer-labels ()
@@ -545,7 +545,7 @@ input, remove the reset command on the current line, if any."
   (git-rebase-set-noncommit-action
    "reset"
    (lambda (initial)
-     (or (magit-completing-read "Label" (git-rebase-buffer-labels)
+     (or (magit2-completing-read "Label" (git-rebase-buffer-labels)
                                 nil t initial)
          ""))
    arg))
@@ -561,7 +561,7 @@ line, if any."
   (git-rebase-set-noncommit-action
    "merge"
    (lambda (_)
-     (or (magit-completing-read "Merge" (git-rebase-buffer-labels))
+     (or (magit2-completing-read "Merge" (git-rebase-buffer-labels))
          ""))
    arg))
 
@@ -575,7 +575,7 @@ commit.  For an upper-case -C, the message will be used as is."
       (git-rebase-current-line)
     (if (eq action-type 'merge)
         (let ((inhibit-read-only t))
-          (magit-delete-line)
+          (magit2-delete-line)
           (insert
            (format "merge %s %s %s\n"
                    (replace-regexp-in-string
@@ -597,7 +597,7 @@ commit.  For an upper-case -C, the message will be used as is."
                 (not same-action-p)
                 (and same-action-p comment-p))
         (unless (or arg (not same-action-p))
-          (magit-delete-line))
+          (magit2-delete-line))
         (insert action ?\n)
         (unless git-rebase-auto-advance
           (forward-line -1))))))
@@ -639,17 +639,17 @@ Like `undo' but works in read-only buffers."
     (undo arg)))
 
 (defun git-rebase--show-commit (&optional scroll)
-  (let ((disable-magit-save-buffers t))
+  (let ((disable-magit2-save-buffers t))
     (save-excursion
       (goto-char (line-beginning-position))
       (--if-let (with-slots (action-type target) (git-rebase-current-line)
                   (and (eq action-type 'commit)
                        target))
           (pcase scroll
-            (`up   (magit-diff-show-or-scroll-up))
-            (`down (magit-diff-show-or-scroll-down))
-            (_     (apply #'magit-show-commit it
-                          (magit-diff-arguments 'magit-revision-mode))))
+            (`up   (magit2-diff-show-or-scroll-up))
+            (`down (magit2-diff-show-or-scroll-down))
+            (_     (apply #'magit2-show-commit it
+                          (magit2-diff-arguments 'magit2-revision-mode))))
         (ding)))))
 
 (defun git-rebase-show-commit ()
@@ -690,11 +690,11 @@ Like `forward-line' but go into the opposite direction."
   "Major mode for editing of a Git rebase file.
 
 Rebase files are generated when you run 'git rebase -i' or run
-`magit-interactive-rebase'.  They describe how Git should perform
+`magit2-interactive-rebase'.  They describe how Git should perform
 the rebase.  See the documentation for git-rebase (e.g., by
 running 'man git-rebase' at the command line) for details."
   :group 'git-rebase
-  (setq comment-start (or (magit-get "core.commentChar") "#"))
+  (setq comment-start (or (magit2-get "core.commentChar") "#"))
   (setq git-rebase-comment-re (concat "^" (regexp-quote comment-start)))
   (setq font-lock-defaults (list (git-rebase-mode-font-lock-keywords) t t))
   (unless git-rebase-show-instructions
@@ -711,24 +711,24 @@ running 'man git-rebase' at the command line) for details."
   (add-hook 'with-editor-pre-cancel-hook  'git-rebase-autostash-save  nil t)
   (add-hook 'with-editor-post-cancel-hook 'git-rebase-autostash-apply nil t)
   (setq imenu-prev-index-position-function
-        #'magit-imenu--rebase-prev-index-position-function)
+        #'magit2-imenu--rebase-prev-index-position-function)
   (setq imenu-extract-index-name-function
-        #'magit-imenu--rebase-extract-index-name-function)
+        #'magit2-imenu--rebase-extract-index-name-function)
   (when (boundp 'save-place)
     (setq save-place nil)))
 
 (defun git-rebase-cancel-confirm (force)
   (or (not (buffer-modified-p))
       force
-      (magit-confirm 'abort-rebase "Abort this rebase" nil 'noabort)))
+      (magit2-confirm 'abort-rebase "Abort this rebase" nil 'noabort)))
 
 (defun git-rebase-autostash-save ()
-  (--when-let (magit-file-line (magit-git-dir "rebase-merge/autostash"))
+  (--when-let (magit2-file-line (magit2-git-dir "rebase-merge/autostash"))
     (push (cons 'stash it) with-editor-cancel-alist)))
 
 (defun git-rebase-autostash-apply ()
   (--when-let (cdr (assq 'stash with-editor-cancel-alist))
-    (magit-stash-apply it)))
+    (magit2-stash-apply it)))
 
 (defun git-rebase-match-comment-line (limit)
   (re-search-forward (concat git-rebase-comment-re ".*") limit t))
@@ -761,9 +761,9 @@ running 'man git-rebase' at the command line) for details."
      0 'git-rebase-killed-action t)
     (git-rebase-match-comment-line 0 'font-lock-comment-face)
     ("\\[[^[]*\\]"
-     0 'magit-keyword t)
+     0 'magit2-keyword t)
     ("\\(?:fixup!\\|squash!\\)"
-     0 'magit-keyword-squash t)
+     0 'magit2-keyword-squash t)
     (,(format "^%s Rebase \\([^ ]*\\) onto \\([^ ]*\\)" comment-start)
      (1 'git-rebase-comment-hash t)
      (2 'git-rebase-comment-hash t))
@@ -830,7 +830,7 @@ By default, this is the same except for the \"pick\" command."
 
 ;;; Imenu Support
 
-(defun magit-imenu--rebase-prev-index-position-function ()
+(defun magit2-imenu--rebase-prev-index-position-function ()
   "Move point to previous commit in git-rebase buffer.
 Used as a value for `imenu-prev-index-position-function'."
   (catch 'found
@@ -839,7 +839,7 @@ Used as a value for `imenu-prev-index-position-function'."
       (when (git-rebase-line-p)
         (throw 'found t)))))
 
-(defun magit-imenu--rebase-extract-index-name-function ()
+(defun magit2-imenu--rebase-extract-index-name-function ()
   "Return imenu name for line at point.
 Point should be at the beginning of the line.  This function
 is used as a value for `imenu-extract-index-name-function'."
