@@ -1128,7 +1128,11 @@ Do not add this to a hook variable."
                                   (alist-get commit-id
                                              result nil nil #'equal)))))
                        result)))
-               (libgit2-revwalk-push-range walk revs)
+               (if (consp revs)
+                   (libgit2-revwalk-push
+                    walk
+                    (libgit2-object-id (libgit2-revparse-single repo (car revs))))
+                 (libgit2-revwalk-push-range walk revs))
                (libgit2-revwalk-foreach
                 walk
                 (lambda (id)
