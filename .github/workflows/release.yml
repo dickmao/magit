@@ -1,0 +1,11 @@
+name: Release
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    uses: commercial-emacs/dignified-elpa/.github/workflows/build.yml@v1
+    with:
+      files: "lisp/magit*.el lisp/git-*.el docs/magit.texi docs/AUTHORS.md LICENSE .dir-locals.el git-hooks/*"
+      exclude: "lisp/magit-section.el"
